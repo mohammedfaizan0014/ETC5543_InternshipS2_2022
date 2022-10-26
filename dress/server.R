@@ -16,8 +16,8 @@ library(crosstalk)
 library(flexdashboard)
 
 
-source(here::here("analysis/DisclosureRisk.R"))
-source(here::here("analysis/DRisk_update.R"))
+source("DisclosureRisk.R")
+source("DRisk_update.R")
 
 server <- function(input, output, session) {
 
@@ -207,6 +207,10 @@ server <- function(input, output, session) {
                       outlier.par = list(centre = median,
                                          scale = var,
                                          thresh = input$thresh))
+        
+        output$rsam <- renderUI({
+          tags$h5("Delta Disclosure Risk of Sample")
+        })
         linkscore <- nn$Linkscore %>%
           mutate(InvValues=(1-Values)*100)
         output$risksample <- renderGauge({
@@ -215,6 +219,9 @@ server <- function(input, output, session) {
           ))#gauge
         })
 
+        output$osam <- renderUI({
+          tags$h5("Delta Disclosure Risk of Sample Outliers")
+        })
         output$riskoutlier <- renderGauge({
           gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
             success = c(80, 100), warning = c(40,79), danger = c(0, 39)
@@ -320,7 +327,9 @@ server <- function(input, output, session) {
                                     numeric.vars = nvar(),
                                     outlier.par = input$thresh)
 
-
+            output$rsam <- renderUI({
+              tags$h5("Delta Disclosure Risk of Sample")
+            })
             linkscore <- nnupdate$Linkscore %>%
               mutate(InvValues=(1-Values)*100)
             output$risksample <- renderGauge({
@@ -328,7 +337,10 @@ server <- function(input, output, session) {
                 success = c(80, 100), warning = c(40,79), danger = c(0, 39)
               ))#gauge
             })
-
+            
+            output$osam <- renderUI({
+              tags$h5("Delta Disclosure Risk of Sample Outliers")
+            })
             output$riskoutlier <- renderGauge({
               gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
                 success = c(80, 100), warning = c(40,79), danger = c(0, 39)
@@ -484,7 +496,7 @@ server <- function(input, output, session) {
                                                                    options = list(searching = TRUE,pageLength = 25,scrollY=TRUE, scrollX = TRUE))
   })
 
-  CASC_sample <- read.csv(here::here("data/CASC_sample.csv"))
+  CASC_sample <- read.csv("CASC_sample.csv")
   dataModal <- function(failed = FALSE) {
     modalDialog(
       renderTable(head(CASC_sample),rownames=TRUE),
@@ -500,7 +512,7 @@ server <- function(input, output, session) {
     showModal(dataModal())
   })
 
-  CASC_protected <- read.csv(here::here("data/CASC_protected.csv"))
+  CASC_protected <- read.csv("CASC_protected.csv")
   dataModalx <- function(failed = FALSE) {
     modalDialog(
       renderTable(head(CASC_protected),rownames=TRUE),
@@ -529,6 +541,10 @@ server <- function(input, output, session) {
                   outlier.par = list(centre = median,
                                      scale = var,
                                      thresh = 0.01))
+    
+    output$rsam <- renderUI({
+      tags$h5("Delta Disclosure Risk of Sample")
+    })
     linkscore <- nneg$Linkscore %>%
       mutate(InvValues=(1-Values)*100)
     output$risksample <- renderGauge({
@@ -537,6 +553,9 @@ server <- function(input, output, session) {
       ))#gauge
     })
 
+    output$osam <- renderUI({
+      tags$h5("Delta Disclosure Risk of Sample Outliers")
+    })
     output$riskoutlier <- renderGauge({
       gauge(round(linkscore[,2][2],2), min = 0, max = 100, symbol = '%', gaugeSectors(
         success = c(80, 100), warning = c(40,79), danger = c(0, 39)
@@ -648,38 +667,6 @@ server <- function(input, output, session) {
     }) #example
 
 
-
-
-
-  # About
-
-
-  url <- a("Our world in Data", href="https://ourworldindata.org/grapher/access-to-clean-fuels-for-cooking-vs-gdp-per-capita")
-
-  world <- a("World Bank", href="https://ourworldindata.org/grapher/access-to-clean-fuels-for-cooking-vs-gdp-per-capita")
-  output$about <- renderUI({
-
-    tagList(tags$h1("About"),
-            tags$hr(),
-            tags$h2("Clean Fuels and Cooking"),
-            tags$img(height = 300 , width = 812, src = "https://c.ndtvimg.com/2020-05/tpj5o4f8_cooking-_625x300_02_May_20.jpg"),
-            tags$br(),
-            tags$p("The data here represents the access of the clean cooking energy for the households in the countries of the world. Additionally, there is information for GDP per capita and popularion across 2000 and 2016 for all countries. This app examines the trends in these factors. We have plotted relationship of GDP per capita and access to clean fuel as a percentage in a scatter plot. The user can slide through the year slide to view the transition across different years. The linearise box flattens the trend using logarithmic translation and the hide low population countries hides countries with population less than one million in that year. The table presents these figures with the relative and absolute changes for all factors for each slider input year. You can also select the countries to see the trend within these selected countries."),
-            tags$p("This is shinyApp, generated by RStudio.
-                       The data used for the visualisation is acquired from "), url,
-            tags$br(),
-            tags$p("And the original dataset is borrowed from "), world,
-            tags$hr(),
-            tags$hr(),
-            tags$h2("About me"),
-            tags$br(),
-            tags$p("I am Mohammed Faizan, currently studying Master of Business Analytics at Monash University. I have completed my first semester and I am so excited about this field of statistical theories and data analysis. I am a true believer in the power of mathematics, that is underlying to all of our approaches in analytics.
-
-Being ambitious about life motivates me as a person with constant and ingenious efforts. With a high grasping power and acquired knowledge with it, I desire to be placed in challenging tasks. I am a charismatic individual encouraging everyone around to be happy and to grow to their highest potential. Researching, working and applying data analytics for optimising our environment in terms of climate change, energy usage and food security is my imperative objective. "),
-            tags$hr(),
-            tags$hr())
-
-  })
 }
 
 

@@ -22,9 +22,9 @@ library(ggthemes)
 library(crosstalk)
 library(flexdashboard)
 
-
-source(here::here("analysis/DisclosureRisk.R"))
-source(here::here("analysis/DRisk_update.R"))
+# 
+# source(here::here("analysis/DisclosureRisk.R"))
+# source(here::here("analysis/DRisk_update.R"))
 
 ui <- dashboardPage(
   preloader = list(html = tagList(spin_1(), "Loading ...")),
@@ -86,9 +86,11 @@ ui <- dashboardPage(
                 box(title="Disclore Risk Information",solidHeader=TRUE,status='primary',background = "white", width=8,
                     fluidRow(
                       column(6,
+                             uiOutput("rsam"),
                              gaugeOutput("risksample", width = "100%", height = "200px")
                              ),
                       column(6,
+                             uiOutput("osam"),
                              gaugeOutput("riskoutlier", width = "100%", height = "200px"))
                     ),
                     #fluidPage(uiOutput("intro")),
@@ -229,24 +231,18 @@ ui <- dashboardPage(
                            title="About",solidHeader=TRUE,status='primary',background = "white",height="100%",
                            tags$h2("Help Center"),
                            tags$hr(),
-                           tags$p("GraphBio includes various of popular data visualization function modules for omics data, and each module follows same design priciple so as to let users use easily.
-            GraphBio supports mutiple common inputfile formats including csv,txt(tab-separated),xls,xlsx, and mutiple common figure formats including pdf,png,jpeg,tiff can be easily downloaded.
-            Here, let's take heatmap as an example to demonstrate the abilities of GraphBio.
-            First of all, we need to click <heatmap> module on the left panel of GraphBio.Then we can see a parameters settings panel on the right of GraphBio."),
+                           tags$p(""),
                            tags$img(src="x1.png",width="50%",height="50%"),
-                           tags$p("Before upload a file, we need to click <view example file> button and view content style."),
+                           tags$p(""),
                            tags$img(src="format.png",width="50%",height="50%"),
-                           tags$p("Subsequently,we can prepare our own file via Excel software
-            according to reference example file. The prepared file can be saved as one of four formats(csv,txt,xls,xlsx)."),
+                           tags$p(""),
                            tags$img(src="heatmap1.png",width="50%",height="50%"),
-                           tags$p("Then upload the file by clicking <Browse...> button.
-            When the upload flow is complete, the figure is automaticly made."),
+                           tags$p(""),
                            tags$img(src="show.png",width="50%",height="50%"),
-                           tags$p("Usually, we possiably want to add a group annotation bar on the figure.Thus, we can upload another sample
-            metadata file."),
+                           tags$p(""),
                            tags$img(src="heatmap2.png"),
                            tags$img(src="show1.png",width="50%",height="50%"),
-                           tags$p("Moreover,we provided mutiple popular color presets selections and other necessary cutomization settings,users can freely test these settings.Finally,we prodvied mutiple popular figure formats for users to download."),
+                           tags$p(""),
                            tags$img(src="settings.png",width="50%",height="50%")
 
               )
@@ -257,24 +253,18 @@ ui <- dashboardPage(
                            title="Help Center",solidHeader=TRUE,status='primary',background = "white",height="100%",
                            tags$h2("Help Center"),
                            tags$hr(),
-                           tags$p("GraphBio includes various of popular data visualization function modules for omics data, and each module follows same design priciple so as to let users use easily.
-            GraphBio supports mutiple common inputfile formats including csv,txt(tab-separated),xls,xlsx, and mutiple common figure formats including pdf,png,jpeg,tiff can be easily downloaded.
-            Here, let's take heatmap as an example to demonstrate the abilities of GraphBio.
-            First of all, we need to click <heatmap> module on the left panel of GraphBio.Then we can see a parameters settings panel on the right of GraphBio."),
+                           tags$p(""),
                            tags$img(src="x1.png",width="50%",height="50%"),
-                           tags$p("Before upload a file, we need to click <view example file> button and view content style."),
+                           tags$p(""),
                            tags$img(src="format.png",width="50%",height="50%"),
-                           tags$p("Subsequently,we can prepare our own file via Excel software
-            according to reference example file. The prepared file can be saved as one of four formats(csv,txt,xls,xlsx)."),
+                           tags$p(""),
                            tags$img(src="heatmap1.png",width="50%",height="50%"),
-                           tags$p("Then upload the file by clicking <Browse...> button.
-            When the upload flow is complete, the figure is automaticly made."),
+                           tags$p(""),
                            tags$img(src="show.png",width="50%",height="50%"),
-                           tags$p("Usually, we possiably want to add a group annotation bar on the figure.Thus, we can upload another sample
-            metadata file."),
+                           tags$p(""),
                            tags$img(src="heatmap2.png"),
                            tags$img(src="show1.png",width="50%",height="50%"),
-                           tags$p("Moreover,we provided mutiple popular color presets selections and other necessary cutomization settings,users can freely test these settings.Finally,we prodvied mutiple popular figure formats for users to download."),
+                           tags$p(""),
                            tags$img(src="settings.png",width="50%",height="50%")
 
               )
@@ -283,13 +273,8 @@ ui <- dashboardPage(
       tabItem(tabName = "contact",
               fluidRow(box(width=12,
                            title="Contact Us",solidHeader=TRUE,status='primary',background = "white",height=800,
-                           tags$p("GraphBio is a easy-to-use visualization analysis tool for omics data. It provides 15 popular visualization analysis modules,
-              including heatmap, volcano plots, MA plots, network plots, dot plots, chord plots, pie plots, four quadrant diagrams, venn diagrams,
-              cumulative distribution curves, PCA, survival analysis, ROC analysis, correlation analysis and text cluster analysis. This enables
-              experimental biologists without programming skills to easily perform visualization analysis and get publication-ready plots in shorter time.In the future,
-              we will continue to integrate popular visualization analysis methods into GraphBio, and provide more easy-to-use modules to research community,
-              accelerating the pace of scientific research in cloud era."),
-                           tags$p("If you have any problem while using GraphBio, pleast feel free to contact us (databio@163.com).")
+                           tags$p(""),
+                           tags$p("")
               ))
       ),
       tabItem(tabName = "faq",
@@ -297,11 +282,11 @@ ui <- dashboardPage(
                            title="FAQ",solidHeader=TRUE,status='primary',background = "white",height=800,
                            tags$h2("FAQ"),
                            tags$hr(),
-                           tags$p("1. GraphBio limits file uploads to 5MB per file."),
-                           tags$p("2. When we save file as csv format in Mircosoft Excel，please do not select csv UTF-8 format."),
-                           tags$p("3. When clicking [run example] button, the generated figure can only be viewed instead of being downloaded."),
-                           tags$p("4. When clicking [view example file] button, example file only show part data for demonstrating the format of input file."),
-                           tags$p("5. The downloaded PDF figures can be easily edited using Adobe Illustrator or Adobe Acrobat software.")
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p("")
               )
               )
       ), #tabItem
