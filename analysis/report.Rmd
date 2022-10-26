@@ -1,0 +1,228 @@
+---
+title: "Disclosure Risk Assessment"
+subtitle: "Business Analytics Creative Activity(ETC5543)- Semester 2, 2022"
+author: |
+  | Author: Mohammed Faizan
+  | Supervisor: Dr.Pauline O'Shaughnessy, Bradley Wakefield
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+---
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE,
+                      echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      cache = TRUE)
+
+#library(dress)
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+
+```
+
+
+
+ 
+
+# Abstract
+
+Research has evolved some of the most beneficial knowledge in varied fields of study, especially when backed with data. However, some research has been under the watch of ethics and privacy concerns of the subjects and individuals who take part and form basis of such research data. Market research and sentiment analysis, response to public policy and survival data are some research topics that are at the peak of when it comes to holding sensitive private data or micro data of individuals. And, therefore governments and institutions have formulated laws and regulations to respect confidentiality before any data set containing sensitive information of individuals is made available to researchers or is released as open data.
+
+Many frameworks for statistical disclosure control exist which aim to provide this confidentiality, however many such methods are built to assess the disclosure risk of 
+the data sets protected using specific control methods only. In this report, the disclosure risk assessment formulated by Bradley Wakefield can be used for measuring disclosure risk universally based on three key principles: distinctness, accuracy and undeniability. Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, irrespective of what mechanism was used to protect it. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. 
+
+We have developed an R package, `dress` that gives this disclosure risk score for micro-data. Additionally a shiny dashboard application has been deployed for easy use of this disclosure risk framework.
+
+
+# Background, motivation:
+
+Though data analytics is now known to have drawn remarkable insights, from existence of Neptune or radio waves or black holes to the future location of a comet with such precision, much has to be still extracted from this ever increasing feed of data. All this can be achieved by deepening our studies in data, analytics and newly found computing power, the machine learning. It was a fundamental insight, and one of the door that led to the modern world, inherent to all our efforts to predict future from stock market to insurance, to web retailers trying to figure out association rules, to diagnosing cancer is the idea that with the right data, the likelihood of future events can be calculated. Today’s output of data is roughly 2.5 quintillion bytes a day. This means that there is so much more to be found out. For example: in numerical weather forecasting, the only certainty is uncertainty, even from global observations to equations running on computers. The Heisenberg’s uncertainty principle states that it is impossible to simultaneously predict, the position and momentum of a quantum particle accurately. We live in an age where fusion of data, computing and analytics grants us more predictive power that we’ve ever known before. We can see the tangible benefits,  and some of the dangers, while also wondering where this will all go. 
+
+Disclosure risk associated with unit record data collected as part of surveys, customer databases, administrative purposes, government records, health data and survival experimental data inevitably amounts to a serious ethical issue. Informed consent(*define*), data distribution and morality of usage pose some concerns with respect to private micro-data of individuals. Moreover, there are legal(*Privacy Act 1988*) and moral obligations that a data custodian and the researcher may face. For example, part of the data held may contain illegal material such as violation of copyright, intellectual property, identity theft and invasion of privacy. It is difficult to filter such data from large data sets. Another good example of moral misuse of private data is data gathering, analytics and other IT services that have the capability to influence people's mood and the decision they take. When powerful technologies are introduced, that have the potential to deliver significant benefits to individuals and society, careful consideration inflicting same level of harm must be accounted for.
+
+Therefore, these obligations imply and entrust the research community and data custodians to publish, disseminate and use information in such a way that the statistical usefulness of the data is maintained, without risk of disclosing the confidential information of any individual. 
+
+
+# Objectives, significance: 
+
+The exact notion of statistical disclosure has in itself room for interpretation, as the widely accepted Dalenius (1977) probabilistic definition,
+“If the release of the statistics S makes it possible to determine the value [of some characteristic] more accurately than is possible without access to S, a disclosure has taken place,” does not exactly specify how one would decide what characteristics would be of concern from a privacy perspective. 
+
+It is impracticable to just consider all possible characteristics otherwise the only acceptable data release would be one which gives absolutely no information about the underlying population. This notion was the central motivation for the development of the Differential Privacy notion of disclosure Dwork (2006). Dalenius (1977) acknowledges this limitation and comments that suitable tolerances of disclosure should be allowed, hence ensuring that this area of concern is about controlling disclosure rather than complete avoidance.
+The advent of publicly available big data sources also means the disclosure problem is no longer restricted to the ability to determine private characteristics given just a single release of information, but how this may be used in conjunction with other publicly available data-sets (de Wolf and Zeelenberg, 2015; Elliot and Domingo-Ferrer, 2018). It is therefore necessary to consider disclosure scenarios when any aspect of the original data could already be public knowledge, known as the maximum-knowledge-intruder perspective Ruiz et al. (2018). It is important to note that in this situation, we are merely intending to ensure that any existing knowledge can not be leveraged to obtain a greater understanding of confidential information.
+Currently there are few accepted ways of universally measuring the disclosure risk of released information, especially when considering the release of a representative (synthetic) micro-level data-set (Hu, 2018; Elliot and Domingo-Ferrer, 2018). This is increasingly relevant as previous assurances about the security of information are becoming more difficult to obtain as proficiency in data mining means that anonymity of data may no longer be as easy to guarantee (Agrawal and Srikant (2000)).
+In this framework for disclosure risk assessment for micro-data, we aim to propose a method by which disclosure risk (at the individual value level) can be measured on any micro-level release of information irrespective of how obscurity was introduced into the released information. Although there has been some considerable advances made in this area (Duncan and Lambert, 1986; Skinner and Elliot, 2002; Domingo-Ferrer and Torra, 2004; Templ, 2017), these disclosure measures are often limited to particular dependency structures between the original and released information. The most regular assumption being that there is a one-to-one dependency between the original data and the released (protected) information (we will refer to this as a pairing) and independence between other observations. Alternatively, a large portion of the established disclosure risk measures used in related literature are specific to the Statistical Disclosure Control method used to protect the released information (Willenborg and de Waal, 2001; Domingo-Ferrer and Mateo-Sanz, 2002; Truta et al., 2003; Lin and Wise, 2012; Lin, 2014; Templ, 2017). These existing approaches to disclosure measurement can somewhat limit the perspective of assessing the success of disclosure limitation to within methodology comparisons and can be unsuitable when a combination of techniques are applied.
+Statistical Disclosure Control encompasses a vast array of methodologies that introduce obscurity and error into a data-set in order to masked the values of individual observations. These types of methods include: the addition of random noise (Fuller, 1993; Shlomo, 2010), micro-aggregation (Domingo-Ferrer and Mateo-Sanz (2002)), rounding, rank and record swapping (Nin et al., 2008; Dalenius and Reiss, 1982), data shuffling (Muralidhar and Sarathy, 2006; Burridge, 2003) and Multiple Imputation with Multimodal Perturbation (Melville and McQuaid (2012)), as well as the non-perturbation SDC methods with examples consisting of global recording, suppression and sub-sampling (Willenborg and De Waal (2012)).
+These methodologies all prescribe considerably different dependency structures between 
+the protected and original sample and as such make comparisons extremely difficult. A unifying perspective of disclosure is of great interest and is the primary contribution this framework offers. The results of this disclorsure risk assessment simplify the problem into two main questions: 
+(1) What characteristics of the data are sensitive? 
+(2) Can the released information be used to obtain an improved understanding of these characteristics? 
+These questions make no mention of the method used, nor even attempt to describe the direct relationship between each observation. This makes it possible to assess disclosure risk on any method regardless of a difference in dimensionality of the released information.
+
+
+# Methodology, data, results, discussion:
+
+ The `Australain Privacy Principles (or APPs)` are the basis of the ["privacy protection framework in the Privacy Act 1988 (Privacy Act). They apply to any organisation or agency the Privacy Act covers. A breach of an Australian Privacy Principle is an ‘interference with the privacy of an individual’ and can lead to regulatory action and penalties."](https://www.oaic.gov.au/privacy/australian-privacy-principles)
+ 
+## Defining Disclosure
+
+When attempting to measure the risk of disclosure in any protected data-set is, what information could be disclosed and how would this information be leaked? Dalenius’ definition (Dalenius, 1977) implies any leakage of information of a sensitive characteristic would constitute a disclosure.Initially, the notion of disclosure is restricted to be one which is solely related to ability of the released information to approximate the value of an original observation and not to any of the inferential properties of the original data-set. In other words, we are more concerned with disclosing the value of an original observation, not the statistical properties that these values infer.
+ 
+Disclosure, in **Definition 1.** , is defined in terms of three key principles: distinctness, accuracy and undeniability. More simply put in order to have a disclosure we need the observation value to be a sensitive characteristic (something likely pertaining to the individual only) within our original data-set (**distinct**), we need to be able to properly estimate this observation based on the release of information (**accurately estimated**) and we need our estimate to be able to be attributed with this observation with some level of certainty (**undeniable**). Moreover, it generally measures disclosure in such a way that we can have certainty about the risk for even the maximum- knowledge-intruder scenario (Ruiz et al., 2018) and protects the statistical utility of the released data set. 
+
+Furthermore we note that when referring to micro-data, we assume there is at least one continuous variable in the data-set.This is because a purely categorical data-set can, without loss of any information, be expressed in a tabular form. Although tabular data is not by it’s nature excluded from this framework, the notion of disclosure for tabular data is fairly well understood with a large portion of the existing literature focusing on empirical studies of the k-anonymity of tabular data (Caiola and Reiter, 2010; Templ, 2017; Taub et al., 2018). Moreover it is fairly easy to contextualize what is meant by a disclosure in a categorical sense as exact matches are possible and the dominance and sensitivity of particular cells can be determined (Willenborg and de Waal, 2001; Domingo-Ferrer and Torra, 2004). That is why unifying approaches to measuring disclosure of tabular data have already been developed whilst for micro-data, the problem has not been resolved (Domingo-Ferrer and Torra, 2004; Elliot and Domingo-Ferrer, 2018).
+Therefore in this paper we focus on techniques suited for data-sets with continuous data as well as categorical data, and propose a definition of disclosure measurement appropriate for such data.
+
+
+**Definition 1.** *Given a release of information, notated as some function $\tau$ (***$D_X$***) of a data- set DX. We say that $\tau$ has disclosed an observation x0 ∈ DX, if the following conditions have been satisfied:*
+*(1) The observation ***$x_0$** *is distinct in ***$D_X$***. The term distinct refers to the notion, that given the original data-set was released, this observation is not indistinguishable from other observations based on some k-anonymity criteria. This is similar to ensuring that the characteristic under consideration (the micro-data value) is actually sensitive.*
+*(2) Given $\tau$ (***$D_X$***) we can obtain an estimate ***$\hat{x_0}$***which is a ***good** *estimate of the observation ***$x_0$** *Where the term ***good estimate** *refers to any estimator which reasonably (according to the preferences of the data agency) represents the observation ***$x_0$** *This is similar to the notion that inference can be made on this sensitive characteristic.*
+*(3) Given a ***good** *estimate ***$\hat{x_0}$** *of the observation $x_0$ then the set $G_{\hat{x_0}}$ = {***x $\in$ $D_X$** *: ***$\hat{x_0}$** *is a ***good** *estimate of ***x***} has less elements than a ***plausibly deniable** *amount of other observations. That is, given we know ***$\hat{x_0}$** *is a good estimate, then we cannot plausibly deny that this estimator corresponds to $x_0$*
+
+Note that this perspective for acknowledging disclosure risk of a protected data-set is not specific to the method used to protect the data-set. Moreover, it generally measures disclosure in such a way that we can have certainty about the risk for even the maximum- knowledge-intruder scenario (Ruiz et al., 2018). Comparing this to Dalenius’ definition (Dalenius, 1977) we maintain the same standard of what a disclosure means, that we can more accurately estimate a particular characteristic (Condition (2) in Definition 1), but added more context as to what type of characteristics we should be focused on (Conditions (1) and (3) in Definition 1).
+
+## Determining if an observation is disclosed.
+In the `dress::wage4` and `dress::wage4_protected`data sets, which have 4 variables: "age", "education", "jobclass" and "wage", suppose we wanted to measure the disclosure risk between the  Mid−Atlantic Wage data and the protected wages data, theoretically using an acceptance margin of 5%  i.e. if our guess is within ±5% of the true wage we consider it a disclosure.  The summary and wage distribution for each dataset is shown below.
+
+
+```{r data}
+wage4 <- read.csv(here::here("data/wage4.csv"))
+wage4_protected <- read.csv(here::here("data/wage4_protected.csv"))
+summary(wage4)
+summary(wage4_protected)
+```
+
+```{r dataDis}
+
+wage4 %>% ggplot() + geom_histogram(aes(wage)) + labs(title="Histogram of Mid−Atlantic Wage Data",x="Wage",y="Frequency") + theme_bw() + wage4_protected %>% ggplot() + geom_histogram(aes(wage)) + labs(title="Histogram of Protected Mid−Atlantic Wage Data",x="Wage",y="Frequency") + theme_bw()
+```
+
+
+If we were to release to the public that the mode of this data is approximately 97, we can link the wage information of 402 individuals. This means that if we were to use 97 as an estimate for any randomly selected wage, then 13.4% of all observations (as there is 3000 observations in this data-set) would be deemed to be correctly identified.However, using the notion of plausible deniability(Dwork, 2006) — the greater the density of observations within a particular region of our sample space, the harder it is we can use this estimate to distinguish this observation from other observations in the space — we will limit our notion of disclosure to distinct points, points which we have defined to be distinguishable from others or points which violate our k-anonymity criteria. 
+
+This notion of plausible deniability is not new in the field of statistical disclosure con- trol, in fact it is the uniting tenant of differential privacy methods which aim to make every observation in the released information plausibly deniable (Dwork, 2006). However, from a micro-data perspective, altering observations to a point in which they are indistinguishable from any point in the original data-set often involves immense amounts of noise, resulting in considerable damage to statistical utility. Instead we will choose to control this notion suggesting that there just needs to be a certain level of plausible representations of a value to consider the observation protected.
+
+Interestingly, a k-anonymity criteria suggests that in some data-sets, there is already obser- vational disclosure protection as observations in high density regions are indistinguishable from each other even without any alterations or use of disclosure control methods. Therefore observations will still be somewhat protected from disclosure even if the original data-set was released in it’s entirety. Hence in order for us to properly gauge the level of protection offered by our protected data-set, we should only consider our disclosure measure with re- spect to observations not already protected.
+
+
+## Results
+
+The primary results from  `drscore` are given as Linkcounts and Linkscore. Linkcounts has all the key combinations of categorical variables and numeral differences between the two data sets and potential matches such as outliers. Linkscore is the overall disclosure risk and other proportions that we'd like to estimate — distinct, accurately estimated and undeniable.
+
+
+
+```{r exampleCont, message=FALSE, warning=FALSE}
+
+library(svMisc)
+library(dress)
+library(sdcMicro)
+
+
+# ##################
+# ##all continuous###################
+CASC_sample <- CASCrefmicrodata[,c(2,3,4,6)]
+CASC_protected <- addNoise(CASC_sample,noise = 100)$xm #Additive Noise protected
+
+DRisk_NN <- drscore(
+  Sample = CASC_sample, #Original Sample
+  Protected = CASC_protected,
+  delta = 0.05,
+  kdistinct = 0.05, #k distinct threshold if integer then
+                 # probability threshold is k/SS (SS = sample size)
+  ldeniable = 5, # l undeniable threshold if integer then
+                         # probability threshold is l/SS (SS = sample size)
+  neighbourhood = 1,
+  #Possible 'neighbourhood' types
+  # 1 = Mahalanobis (Based on Mahalanobis Distance)
+  # 2 = DSTAR   (Based on Density Based Distance)
+  # 3 = StdEuclid (Based on Standardised (by std dev) Euclidean Distance)
+  # 4 = RelEuclid (Relative Euclidean Distance sum_k ((Xk-Yk)/Xk)^2)
+  neigh_type = 'prob',
+  #Possible 'neigh_type' types
+  #constant = fixed threshold on distance
+  #prob = Nearest Neighbour Probability Neighbourhood used (Worst Case Scenario 1)
+  #estprob = = Nearest Neighbour Probability Neighbourhood used based on protected density (Worst Case Scenario 2)
+  numeric.vars = 1:4, #Which Variables are continuous?
+  outlier.par = list(centre = median,
+                     scale = var,
+                     thresh = 0.01)
+  #Parameters to adjust how MV outliers are determined.
+  #Default is that lie 99% (based on Chi-Square n-1 dist) away from median after scale by variance.
+)
+
+#Update neighbourhood to fixed threshold definition
+DRisk_Fxd <- update(DRisk_NN,neigh_type = 'constant',
+                          delta = 1)
+
+
+```
+
+```{r examplemixed, message=FALSE, warning=FALSE}
+
+########################
+## mixed dataset
+########################
+nn <- drscore(Sample = wage4, Protected = wage4_protected, numeric.vars = c(1,4))
+
+nn$Linkcounts
+
+nn$Linkscore
+```
+
+Two widely used distances used in this package are Mahalanobis Distance and Euclidean Distance. These distances are specified by the user. When not fully specified, the unspecified parameters will be default as below.
+
+```{r func, eval=FALSE}
+drscore <-
+  function(
+    Sample,
+    Protected,
+    delta = 0.05,
+    neighbourhood = 1,
+    kdistinct = 5,
+    ldeniable = kdistinct,
+    neigh_type = 'constant',
+    numeric.vars = NULL,
+    outlier.par = list(centre = median,
+                       scale = var,
+                       thresh = 0.01)
+  )
+```
+
+
+
+Finally it is important to accept when it comes to understanding the disclosure risk of any release of data, a single measurement or parameter will never really be sufficient in itself to adequately represent the entire risk of disclosure that said release of information represents. The varying ways in which disclosure can happen through attribute properties, inferential properties and value estimation are often extremely complex and need to be treated as such. Nevertheless, the disclosure risk framework we propose can still be a useful tool in measuring disclosure risk by providing a more formalised and general approach to understanding disclosure.
+
+More information about mathematics behind measuring the disclosure risk  can be found in the paper [*On the Disclosure Risk Framework for Micro-Level Data*]() and in the [*pkgdown site*]().
+
+
+
+# Appendix
+
+ 
+#### Personal Information
+ 
+-  *"Common examples are an individual’s name, signature, address, telephone number, date of birth, medical records, bank account details, employment details and commentary or opinion about a person." Section B.86, Australian Privacy Principle Guidelines*
+
+#### Meaning of 'reasonably identifiable’
+
+ The `Australain Bureau of Statistcs` define re-identification as:
+ 
+ "Re-identification occurs when the identity of a person or organisation is determined even though directly identifying information has been removed. This may be able to be done using other publicly or privately held information about the individual or organisation. This type of disclosure, or breach of confidentiality, that can occur when someone has access to either aggregate data (such as tables) or microdata (unit record data)."
+
+Whether an individual is ‘reasonably identifiable’ from particular information will depend on considerations that include:[28]
+
+- the nature and amount of information
+- the circumstances of its receipt
+- who will have access to the information
+- other information either held by or available to the APP entity that holds the information
+whether it is possible for the individual or entity that holds the information to identify the individual, using available resources (including other information available to that individual or entity). Where it may be possible to identify an individual using available resources, the practicability, including the time and cost involved, will be relevant to deciding whether an individual is ‘reasonably identifiable’
+- if the information is publically released, whether a reasonable member of the public who accesses that information would be able to identify the individual.
+
+
+
