@@ -22,7 +22,7 @@ source("DRisk_update.R")
 server <- function(input, output, session) {
 
   shinyalert("Welcome",
-             "Welcome to the ___ Dashboard!",
+             "Welcome to Disclosure Risk Assessment Dashboard!",
              type = "info",
              timer = 10000)
 
