@@ -1,6 +1,7 @@
 ggplot2
 dplyr
 patchwork
+knitr
 svMisc
 sdcMicro
-dress
+RefManageR

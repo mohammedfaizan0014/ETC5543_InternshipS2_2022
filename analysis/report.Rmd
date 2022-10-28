@@ -8,7 +8,24 @@ date: "`r Sys.Date()`"
 output:
   rmdformats::readthedown:
     highlight: kate
+    
 ---
+
+
+```{css,echo=FALSE}
+button.btn.collapsed:before
+{
+    content:'+' ;
+    display:block;
+    width:15px;
+}
+button.btn:before
+{
+    content:'-' ;
+    display:block;
+    width:15px;
+}
+```
 
 ```{r setup, include=FALSE}
 ## Global options
@@ -18,31 +35,94 @@ knitr::opts_chunk$set(cache = TRUE,
                       warning = FALSE,
                       cache = TRUE)
 
-#library(dress)
+# library(dress)
+
+#this report
 library(ggplot2)
 library(dplyr)
 library(patchwork)
+library(knitr)
+
+#Shiny Dashboard
+# library(shiny)
+# library(shinyalert)
+# library(shinyvalidate)
+# library(shinyWidgets)
+# library(shinythemes)
+# 
+# library(DT)
+# library(gt)
+# library(tidyverse)
+# library(here)
+# library(scales)
+# library(ggthemes)
+# library(flexdashboard)
+
+#disclosure framework data
+# library(svMisc)
+# #library(dress)
+# library(sdcMicro)
+# library(ISLR)
+
+
+#R package: dress
+# library(assertthat)
+# library(utils)
+# library(usethis)
+# library(devtools)
+# library(pkgdown)
+# library(roxygen2)
+# library(fable)
+# library(testthat)
 
 
 ```
 
+```{r writing_packages_bibliographies3, eval=FALSE}
+knitr::write_bib(c(.packages()), "packages.bib")
+```
+
+```{r,echo=FALSE,results='hide'}
+knitr::knit_hooks$set(drop2=function(before, options, envir) {
+    if (before) {
+        paste(
+            '<p>',
+'<button class="btn btn-primary collapsed" data-toggle="collapse" data-target="#ce1">',
+'</button>',
+'</p>',
+'<div class="collapse" id="ce1">',
+'<div class="card card-body">',  sep = "\n")
+    } else {
+        paste("</div>", "</div>", sep = "\n")
+    }
+})
+
+
+```
+
+
+```{r fig.cap="Recent cyber attacks in Australia. Source: https://www.instagram.com/p/Ciy8iJ5skO2/?utm_source=ig_web_copy_link"}
+knitr::include_graphics(here::here("analysis/figure/image.png"))
+```
 
 
  
 
 # Abstract
 
-Research has evolved some of the most beneficial knowledge in varied fields of study, especially when backed with data. However, some research has been under the watch of ethics and privacy concerns of the subjects and individuals who take part and form basis of such research data. Market research and sentiment analysis, response to public policy and survival data are some research topics that are at the peak of when it comes to holding sensitive private data or micro data of individuals. And, therefore governments and institutions have formulated laws and regulations to respect confidentiality before any data set containing sensitive information of individuals is made available to researchers or is released as open data.
+Research has evolved some of the most reasonable insights in varied fields of study, especially when backed with data. However, some research has been under the watch of ethics and privacy concerns of the subjects and individuals who take part and form basis of such research data. Market research and sentiment analysis, response to public policy and survival data are some research topics that are most relevant to holding sensitive private data or micro data of individuals. And, therefore governments and institutions have formulated laws and regulations to respect confidentiality before any data set containing sensitive information of individuals is made available to researchers or is released as open data.
 
 Many frameworks for statistical disclosure control exist which aim to provide this confidentiality, however many such methods are built to assess the disclosure risk of 
-the data sets protected using specific control methods only. In this report, the disclosure risk assessment formulated by Bradley Wakefield can be used for measuring disclosure risk universally based on three key principles: distinctness, accuracy and undeniability. Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, irrespective of what mechanism was used to protect it. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. 
+the data sets protected using specific control methods only. In this work, the disclosure risk assessment formulated by *Bradley Wakefield* can be used for measuring disclosure risk universally based on three key principles: distinctness, accuracy and undeniability. Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, irrespective of what mechanism was used to protect it. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. 
 
 We have developed an R package, `dress` that gives this disclosure risk score for micro-data. Additionally a shiny dashboard application has been deployed for easy use of this disclosure risk framework.
+
+**Keywords**: *Disclosure Risk, Ethics and Data Privacy, Unit Record Data, Micro-Data. Informed Consent, De-Identification, Re-Identification, R package, R Shiny Dashboard*
 
 
 # Background, motivation:
 
-Though data analytics is now known to have drawn remarkable insights, from existence of Neptune or radio waves or black holes to the future location of a comet with such precision, much has to be still extracted from this ever increasing feed of data. All this can be achieved by deepening our studies in data, analytics and newly found computing power, the machine learning. It was a fundamental insight, and one of the door that led to the modern world, inherent to all our efforts to predict future from stock market to insurance, to web retailers trying to figure out association rules, to diagnosing cancer is the idea that with the right data, the likelihood of future events can be calculated. Today’s output of data is roughly 2.5 quintillion bytes a day. This means that there is so much more to be found out. For example: in numerical weather forecasting, the only certainty is uncertainty, even from global observations to equations running on computers. The Heisenberg’s uncertainty principle states that it is impossible to simultaneously predict, the position and momentum of a quantum particle accurately. We live in an age where fusion of data, computing and analytics grants us more predictive power that we’ve ever known before. We can see the tangible benefits,  and some of the dangers, while also wondering where this will all go. 
+Though data analytics is now known to have drawn remarkable insights, from existence of Neptune or radio waves or black holes to the future location of a comet with such precision, much has to be still extracted from this ever increasing feed of data. All this can be achieved by deepening our studies in data, analytics and newly found computing power, the machine learning. It was a fundamental insight, and one of the door that led to the modern world, inherent to all our efforts to predict future from stock market to insurance, to web retailers trying to figure out association rules, to diagnosing cancer is the idea that with the right data, the likelihood of future events can be calculated. Today’s output of data is roughly 2.5 quintillion bytes a day. This means that there is so much more to be found out. For example: in numerical weather forecasting, the only certainty is uncertainty, even from global observations to equations running on computers. The Heisenberg’s uncertainty principle states that it is impossible to simultaneously predict, the position and momentum of a quantum particle accurately. We live in an age where fusion of data, computing and analytics grants us more predictive power than we’ve ever known before. We can see the tangible benefits,  and some of the dangers, while also wondering where this will all go. 
 
 Disclosure risk associated with unit record data collected as part of surveys, customer databases, administrative purposes, government records, health data and survival experimental data inevitably amounts to a serious ethical issue. Informed consent(*define*), data distribution and morality of usage pose some concerns with respect to private micro-data of individuals. Moreover, there are legal(*Privacy Act 1988*) and moral obligations that a data custodian and the researcher may face. For example, part of the data held may contain illegal material such as violation of copyright, intellectual property, identity theft and invasion of privacy. It is difficult to filter such data from large data sets. Another good example of moral misuse of private data is data gathering, analytics and other IT services that have the capability to influence people's mood and the decision they take. When powerful technologies are introduced, that have the potential to deliver significant benefits to individuals and society, careful consideration inflicting same level of harm must be accounted for.
 
@@ -56,39 +136,41 @@ The exact notion of statistical disclosure has in itself room for interpretation
 
 It is impracticable to just consider all possible characteristics otherwise the only acceptable data release would be one which gives absolutely no information about the underlying population. This notion was the central motivation for the development of the Differential Privacy notion of disclosure Dwork (2006). Dalenius (1977) acknowledges this limitation and comments that suitable tolerances of disclosure should be allowed, hence ensuring that this area of concern is about controlling disclosure rather than complete avoidance.
 The advent of publicly available big data sources also means the disclosure problem is no longer restricted to the ability to determine private characteristics given just a single release of information, but how this may be used in conjunction with other publicly available data-sets (de Wolf and Zeelenberg, 2015; Elliot and Domingo-Ferrer, 2018). It is therefore necessary to consider disclosure scenarios when any aspect of the original data could already be public knowledge, known as the maximum-knowledge-intruder perspective Ruiz et al. (2018). It is important to note that in this situation, we are merely intending to ensure that any existing knowledge can not be leveraged to obtain a greater understanding of confidential information.
-Currently there are few accepted ways of universally measuring the disclosure risk of released information, especially when considering the release of a representative (synthetic) micro-level data-set (Hu, 2018; Elliot and Domingo-Ferrer, 2018). This is increasingly relevant as previous assurances about the security of information are becoming more difficult to obtain as proficiency in data mining means that anonymity of data may no longer be as easy to guarantee (Agrawal and Srikant (2000)).
+Currently there are few accepted ways of universally measuring the disclosure risk of released information, especially when considering the release of a representative *(synthetic)* micro-level data-set (Hu, 2018; Elliot and Domingo-Ferrer, 2018). This is increasingly relevant as previous assurances about the security of information are becoming more difficult to obtain as proficiency in data mining means that anonymity of data may no longer be as easy to guarantee (Agrawal and Srikant (2000)).
 In this framework for disclosure risk assessment for micro-data, we aim to propose a method by which disclosure risk (at the individual value level) can be measured on any micro-level release of information irrespective of how obscurity was introduced into the released information. Although there has been some considerable advances made in this area (Duncan and Lambert, 1986; Skinner and Elliot, 2002; Domingo-Ferrer and Torra, 2004; Templ, 2017), these disclosure measures are often limited to particular dependency structures between the original and released information. The most regular assumption being that there is a one-to-one dependency between the original data and the released (protected) information (we will refer to this as a pairing) and independence between other observations. Alternatively, a large portion of the established disclosure risk measures used in related literature are specific to the Statistical Disclosure Control method used to protect the released information (Willenborg and de Waal, 2001; Domingo-Ferrer and Mateo-Sanz, 2002; Truta et al., 2003; Lin and Wise, 2012; Lin, 2014; Templ, 2017). These existing approaches to disclosure measurement can somewhat limit the perspective of assessing the success of disclosure limitation to within methodology comparisons and can be unsuitable when a combination of techniques are applied.
 Statistical Disclosure Control encompasses a vast array of methodologies that introduce obscurity and error into a data-set in order to masked the values of individual observations. These types of methods include: the addition of random noise (Fuller, 1993; Shlomo, 2010), micro-aggregation (Domingo-Ferrer and Mateo-Sanz (2002)), rounding, rank and record swapping (Nin et al., 2008; Dalenius and Reiss, 1982), data shuffling (Muralidhar and Sarathy, 2006; Burridge, 2003) and Multiple Imputation with Multimodal Perturbation (Melville and McQuaid (2012)), as well as the non-perturbation SDC methods with examples consisting of global recording, suppression and sub-sampling (Willenborg and De Waal (2012)).
 These methodologies all prescribe considerably different dependency structures between 
-the protected and original sample and as such make comparisons extremely difficult. A unifying perspective of disclosure is of great interest and is the primary contribution this framework offers. The results of this disclorsure risk assessment simplify the problem into two main questions: 
+the protected and original sample and as such make comparisons extremely difficult. A unifying perspective of disclosure is of great interest and is the primary contribution this framework offers. The results of this disclosure risk assessment simplify the problem into two main questions: 
 (1) What characteristics of the data are sensitive? 
 (2) Can the released information be used to obtain an improved understanding of these characteristics? 
 These questions make no mention of the method used, nor even attempt to describe the direct relationship between each observation. This makes it possible to assess disclosure risk on any method regardless of a difference in dimensionality of the released information.
 
 
-# Methodology, data, results, discussion:
+# Methodology and Disclosure Framework:
 
- The `Australain Privacy Principles (or APPs)` are the basis of the ["privacy protection framework in the Privacy Act 1988 (Privacy Act). They apply to any organisation or agency the Privacy Act covers. A breach of an Australian Privacy Principle is an ‘interference with the privacy of an individual’ and can lead to regulatory action and penalties."](https://www.oaic.gov.au/privacy/australian-privacy-principles)
+> The `Australain Privacy Principles (or APPs)` are the basis of the ["privacy protection framework in the Privacy Act 1988 (Privacy Act). They apply to any organisation or agency the Privacy Act covers. A breach of an Australian Privacy Principle is an ‘interference with the privacy of an individual’ and can lead to regulatory action and penalties."](https://www.oaic.gov.au/privacy/australian-privacy-principles)
  
 ## Defining Disclosure
 
-When attempting to measure the risk of disclosure in any protected data-set is, what information could be disclosed and how would this information be leaked? Dalenius’ definition (Dalenius, 1977) implies any leakage of information of a sensitive characteristic would constitute a disclosure.Initially, the notion of disclosure is restricted to be one which is solely related to ability of the released information to approximate the value of an original observation and not to any of the inferential properties of the original data-set. In other words, we are more concerned with disclosing the value of an original observation, not the statistical properties that these values infer.
+When attempting to measure the risk of disclosure in any protected data-set is, what information could be disclosed and how would this information be leaked? Dalenius’ definition (Dalenius, 1977) implies any leakage of information of a sensitive characteristic would constitute a disclosure. Initially, the notion of disclosure is restricted to be one which is solely related to ability of the released information to approximate the value of an original observation and not to any of the inferential properties of the original data-set. In other words, we are more concerned with disclosing the value of an original observation, not the statistical properties that these values infer.
  
-Disclosure, in **Definition 1.** , is defined in terms of three key principles: distinctness, accuracy and undeniability. More simply put in order to have a disclosure we need the observation value to be a sensitive characteristic (something likely pertaining to the individual only) within our original data-set (**distinct**), we need to be able to properly estimate this observation based on the release of information (**accurately estimated**) and we need our estimate to be able to be attributed with this observation with some level of certainty (**undeniable**). Moreover, it generally measures disclosure in such a way that we can have certainty about the risk for even the maximum- knowledge-intruder scenario (Ruiz et al., 2018) and protects the statistical utility of the released data set. 
+Disclosure, in **Definition 1.** , is defined in terms of three key principles: distinctness, accuracy and undeniability. More simply put in order to have a disclosure we need the observation value to be a sensitive characteristic (something likely pertaining to the individual only) within our original data-set (**distinct**), we need to be able to properly estimate this observation based on the release of information (**accurately estimated**) and we need our estimate to be able to be attributed with this observation with some level of certainty (**undeniable**). Moreover, it generally measures disclosure in such a way that we can have certainty about the risk for even the maximum- knowledge-intruder scenario (Ruiz et al., 2018) and takes in consideration, the statistical utility of the released data set. 
 
 Furthermore we note that when referring to micro-data, we assume there is at least one continuous variable in the data-set.This is because a purely categorical data-set can, without loss of any information, be expressed in a tabular form. Although tabular data is not by it’s nature excluded from this framework, the notion of disclosure for tabular data is fairly well understood with a large portion of the existing literature focusing on empirical studies of the k-anonymity of tabular data (Caiola and Reiter, 2010; Templ, 2017; Taub et al., 2018). Moreover it is fairly easy to contextualize what is meant by a disclosure in a categorical sense as exact matches are possible and the dominance and sensitivity of particular cells can be determined (Willenborg and de Waal, 2001; Domingo-Ferrer and Torra, 2004). That is why unifying approaches to measuring disclosure of tabular data have already been developed whilst for micro-data, the problem has not been resolved (Domingo-Ferrer and Torra, 2004; Elliot and Domingo-Ferrer, 2018).
-Therefore in this paper we focus on techniques suited for data-sets with continuous data as well as categorical data, and propose a definition of disclosure measurement appropriate for such data.
+Therefore in this framework we focus on techniques suited for data-sets with continuous data as well as categorical data, and propose a definition of disclosure measurement appropriate for such data.
 
 
-**Definition 1.** *Given a release of information, notated as some function $\tau$ (***$D_X$***) of a data- set DX. We say that $\tau$ has disclosed an observation x0 ∈ DX, if the following conditions have been satisfied:*
-*(1) The observation ***$x_0$** *is distinct in ***$D_X$***. The term distinct refers to the notion, that given the original data-set was released, this observation is not indistinguishable from other observations based on some k-anonymity criteria. This is similar to ensuring that the characteristic under consideration (the micro-data value) is actually sensitive.*
-*(2) Given $\tau$ (***$D_X$***) we can obtain an estimate ***$\hat{x_0}$***which is a ***good** *estimate of the observation ***$x_0$** *Where the term ***good estimate** *refers to any estimator which reasonably (according to the preferences of the data agency) represents the observation ***$x_0$** *This is similar to the notion that inference can be made on this sensitive characteristic.*
-*(3) Given a ***good** *estimate ***$\hat{x_0}$** *of the observation $x_0$ then the set $G_{\hat{x_0}}$ = {***x $\in$ $D_X$** *: ***$\hat{x_0}$** *is a ***good** *estimate of ***x***} has less elements than a ***plausibly deniable** *amount of other observations. That is, given we know ***$\hat{x_0}$** *is a good estimate, then we cannot plausibly deny that this estimator corresponds to $x_0$*
+**Definition 1.** <br/>
+*Given a release of information, notated as some function $\tau$ (***$D_X$***) of a data- set DX. We say that $\tau$ has disclosed an observation x0 ∈ DX, if the following conditions have been satisfied:* <br/>
+*(1) The observation ***$x_0$** *is distinct in ***$D_X$***. The term distinct refers to the notion, that given the original data-set was released, this observation is not indistinguishable from other observations based on some k-anonymity criteria. This is similar to ensuring that the characteristic under consideration (the micro-data value) is actually sensitive.* <br/>
+*(2) Given $\tau$ (***$D_X$***) we can obtain an estimate ***$\hat{x_0}$***which is a ***good** *estimate of the observation ***$x_0$** *Where the term ***good estimate** *refers to any estimator which reasonably (according to the preferences of the data agency) represents the observation ***$x_0$** *This is similar to the notion that inference can be made on this sensitive characteristic.* <br/>
+*(3) Given a ***good** *estimate ***$\hat{x_0}$** *of the observation $x_0$ then the set $G_{\hat{x_0}}$ = {***x $\in$ $D_X$** *: ***$\hat{x_0}$** *is a ***good** *estimate of ***x***} has less elements than a ***plausibly deniable** *amount of other observations. That is, given we know ***$\hat{x_0}$** *is a good estimate, then we cannot plausibly deny that this estimator corresponds to $x_0$.* <br/>
 
-Note that this perspective for acknowledging disclosure risk of a protected data-set is not specific to the method used to protect the data-set. Moreover, it generally measures disclosure in such a way that we can have certainty about the risk for even the maximum- knowledge-intruder scenario (Ruiz et al., 2018). Comparing this to Dalenius’ definition (Dalenius, 1977) we maintain the same standard of what a disclosure means, that we can more accurately estimate a particular characteristic (Condition (2) in Definition 1), but added more context as to what type of characteristics we should be focused on (Conditions (1) and (3) in Definition 1).
+Note that this perspective for acknowledging disclosure risk of a protected data-set is not specific to the method used to protect the data-set. Comparing this to Dalenius’ definition (Dalenius, 1977) we maintain the same standard of what a disclosure means, that we can more accurately estimate a particular characteristic (Condition (2) in Definition 1), but added more context as to what type of characteristics we should be focused on (Conditions (1) and (3) in Definition 1).
 
 ## Determining if an observation is disclosed.
-In the `dress::wage4` and `dress::wage4_protected`data sets, which have 4 variables: "age", "education", "jobclass" and "wage", suppose we wanted to measure the disclosure risk between the  Mid−Atlantic Wage data and the protected wages data, theoretically using an acceptance margin of 5%  i.e. if our guess is within ±5% of the true wage we consider it a disclosure.  The summary and wage distribution for each dataset is shown below.
+
+In the `dress::wage4` and `dress::wage4_protected`data sets, which have 4 variables: "age", "education", "jobclass" and "wage", suppose we wanted to measure the disclosure risk between the  Mid−Atlantic Wage data(*reference data*) and a possible released data de-identified by some *SDC* method, theoretically using an acceptance margin of 5%  i.e. if our guess is within ±5% of the true wage we consider it a disclosure.  The summary and wage distribution for each dataset is shown below.
 
 
 ```{r data}
@@ -98,31 +180,58 @@ summary(wage4)
 summary(wage4_protected)
 ```
 
-```{r dataDis}
+```{r dataDis, fig.cap="Comparing the Distribution of Sample and Protected Mid−Atlantic Wage Data"}
 
 wage4 %>% ggplot() + geom_histogram(aes(wage)) + labs(title="Histogram of Mid−Atlantic Wage Data",x="Wage",y="Frequency") + theme_bw() + wage4_protected %>% ggplot() + geom_histogram(aes(wage)) + labs(title="Histogram of Protected Mid−Atlantic Wage Data",x="Wage",y="Frequency") + theme_bw()
 ```
 
 
-If we were to release to the public that the mode of this data is approximately 97, we can link the wage information of 402 individuals. This means that if we were to use 97 as an estimate for any randomly selected wage, then 13.4% of all observations (as there is 3000 observations in this data-set) would be deemed to be correctly identified.However, using the notion of plausible deniability(Dwork, 2006) — the greater the density of observations within a particular region of our sample space, the harder it is we can use this estimate to distinguish this observation from other observations in the space — we will limit our notion of disclosure to distinct points, points which we have defined to be distinguishable from others or points which violate our k-anonymity criteria. 
+If we were to release to the public that the mode of this data is approximately 97, we can link the wage information of 402 individuals. This means that if we were to use 97 as an estimate for any randomly selected wage, then 13.4% of all observations (as there is 3000 observations in this data-set) would be deemed to be correctly identified.However, using the notion of plausible deniability(Dwork, 2006) — the greater the density of observations within a particular region of our sample space, the harder it is we can use this estimate to distinguish this observation from other observations in the space — we will limit our notion of disclosure to distinct points — points which we have defined to be distinguishable from others or points which violate our *k-anonymity* criteria. 
 
-This notion of plausible deniability is not new in the field of statistical disclosure con- trol, in fact it is the uniting tenant of differential privacy methods which aim to make every observation in the released information plausibly deniable (Dwork, 2006). However, from a micro-data perspective, altering observations to a point in which they are indistinguishable from any point in the original data-set often involves immense amounts of noise, resulting in considerable damage to statistical utility. Instead we will choose to control this notion suggesting that there just needs to be a certain level of plausible representations of a value to consider the observation protected.
+This notion of plausible deniability is not new in the field of statistical disclosure control, in fact it is the uniting tenant of differential privacy methods which aim to make every observation in the released information plausibly deniable (Dwork, 2006). However, from a micro-data perspective, altering observations to a point in which they are indistinguishable from any point in the original data-set often involves immense amounts of noise, resulting in considerable damage to statistical utility. Instead we will choose to control this notion(*ldeniable*) suggesting that there just needs to be a certain level of plausible representations of a value to consider the observation protected.
 
-Interestingly, a k-anonymity criteria suggests that in some data-sets, there is already obser- vational disclosure protection as observations in high density regions are indistinguishable from each other even without any alterations or use of disclosure control methods. Therefore observations will still be somewhat protected from disclosure even if the original data-set was released in it’s entirety. Hence in order for us to properly gauge the level of protection offered by our protected data-set, we should only consider our disclosure measure with re- spect to observations not already protected.
+Interestingly, a k-anonymity criteria suggests that in some data-sets, there is already observational disclosure protection as observations in high density regions are indistinguishable from each other even without any alterations or use of disclosure control methods. Therefore observations will still be somewhat protected from disclosure even if the original data-set was released in it’s entirety. Hence in order for us to properly gauge the level of protection offered by our protected data-set, we should only consider our disclosure measure with respect to observations not already protected.
 
 
-## Results
+
+
+# Results
+
+The internship was about understanding the disclosure risk assessment framework developed by *Bradley Wakefield* under the guidance of *Dr. Pauline O'Shaughnessy* and to convert two functions of this framework: `drscore` and `update` into an R package. Additionally, a shiny dashboard for illustration and use of this framework was deployed. The main challenge involved was to understand the concept of this framework as explained in the previous sections. Particularly this internship was of interest to me as I like to work around moral handling of data and de-identification of micro data or unit record data. This internship also enabled me to practice my package development skills and understand and work with the re-activity of R shiny applications.
+
+## The framework functions: drscore and update
+
+#### drscore
 
 The primary results from  `drscore` are given as Linkcounts and Linkscore. Linkcounts has all the key combinations of categorical variables and numeral differences between the two data sets and potential matches such as outliers. Linkscore is the overall disclosure risk and other proportions that we'd like to estimate — distinct, accurately estimated and undeniable.
 
+Two widely used distances used in this package are Mahalanobis Distance and Euclidean Distance. These distances are specified by the user. When not fully specified, the unspecified parameters will be default as below.
 
+```{r func, eval=FALSE, echo=TRUE}
+drscore <-
+  function(
+    Sample,
+    Protected,
+    delta = 0.05,
+    neighbourhood = 1,
+    kdistinct = 5,
+    ldeniable = kdistinct,
+    neigh_type = 'constant',
+    numeric.vars = NULL,
+    outlier.par = list(centre = median,
+                       scale = var,
+                       thresh = 0.01)
+  )
+```
 
-```{r exampleCont, message=FALSE, warning=FALSE}
+```{r exampleCont, message=FALSE, warning=FALSE, echo=TRUE}
 
 library(svMisc)
-library(dress)
+#library(dress)
 library(sdcMicro)
 
+source(here::here("analysis/DisclosureRisk.R"))
+source(here::here("analysis/DRisk_update.R"))
 
 # ##################
 # ##all continuous###################
@@ -156,50 +265,1298 @@ DRisk_NN <- drscore(
   #Default is that lie 99% (based on Chi-Square n-1 dist) away from median after scale by variance.
 )
 
-#Update neighbourhood to fixed threshold definition
-DRisk_Fxd <- update(DRisk_NN,neigh_type = 'constant',
-                          delta = 1)
+
 
 
 ```
 
-```{r examplemixed, message=FALSE, warning=FALSE}
+```{r examplemixed, message=FALSE, warning=FALSE, echo=TRUE, include=FALSE}
 
 ########################
 ## mixed dataset
 ########################
 nn <- drscore(Sample = wage4, Protected = wage4_protected, numeric.vars = c(1,4))
+```
 
+```{r echo=TRUE,eval=FALSE}
+########################
+## mixed dataset
+########################
+nn <- drscore(Sample = wage4, Protected = wage4_protected, numeric.vars = c(1,4))
+```
+
+
+```{r echo=TRUE}
 nn$Linkcounts
 
 nn$Linkscore
 ```
 
-Two widely used distances used in this package are Mahalanobis Distance and Euclidean Distance. These distances are specified by the user. When not fully specified, the unspecified parameters will be default as below.
 
-```{r func, eval=FALSE}
-drscore <-
-  function(
-    Sample,
-    Protected,
-    delta = 0.05,
-    neighbourhood = 1,
-    kdistinct = 5,
-    ldeniable = kdistinct,
-    neigh_type = 'constant',
-    numeric.vars = NULL,
-    outlier.par = list(centre = median,
-                       scale = var,
-                       thresh = 0.01)
+
+
+
+
+
+#### Update
+
+Update mainly avoids re-calculation of the distances to save computation time. It takes previous parameters from the `DRisk` object of the `drscore`. Distances are re-calculated only when the neighbourhood is different. However, in the current version update does not work for mixed data-sets having both categorical and continuous variables. 
+
+```{r eval=FALSE, echo=TRUE}
+update <-
+  function(DRisk,...){
+
+    assertthat::assert_that(class(DRisk)=="DRisk",msg = "Not a DRisk object")
+    par_flag <- rep(T,6)
+    if('delta' %in% names(c(...))){ delta <- c(...)['delta']; par_flag[1] <-F}
+    if('neighbourhood' %in% names(c(...))){ neighbourhood <- c(...)['neighbourhood']; par_flag[2] <-F}
+    if('kdistinct' %in% names(c(...))){ kdistinct <- c(...)['kdistinct']; par_flag[3] <-F}
+    if('ldeniable' %in% names(c(...))){ ldeniable <- c(...)['ldeniable']; par_flag[4] <-F}
+    if('neigh_type' %in% names(c(...))){ neigh_type <- c(...)['neigh_type']; par_flag[5] <-F}
+    if('outlier.par' %in% names(c(...))){ outlier.par <- c(...)$outlier.par; par_flag[6] <-F}
+
+    if(par_flag[1]) delta <- DRisk$parameters$delta
+    if(par_flag[2]) neighbourhood <- DRisk$parameters$neighbourhood
+    if(par_flag[3]) kdistinct <- DRisk$parameters$kdistinct
+    if(par_flag[4]) ldeniable <- DRisk$parameters$ldeniable
+    if(par_flag[5]) neigh_type <- DRisk$parameters$neigh_type
+    if(par_flag[6]) outlier.par <- DRisk$parameters$outlier.par
+    .....
+  }
+```
+
+```{r echo=TRUE}
+# ##################
+# ##all continuous###################
+#Update neighbourhood to fixed threshold definition. 
+DRisk_Fxd <- update(DRisk_NN,neigh_type = 'constant',
+                          delta = 1)
+```
+
+
+## R Package: dress
+
+In creating the package for this disclosure framework, the first task was to document these functions along with the two data sets which were published as part of the package. Each function and each data should have its own documentation. And each function must be exported to the `namesapce` in order to be available when the when the package is installed. Documentation allows the the user's to know about the package usage and about the different functions and data-sets that come with the package. It is also help for the developers to keep record for future. R essentially provides for documentation in the `.Rd` files which are based on LaTeX and are stored in the `man/` folder. Using `roxygen2` these `.Rd` files can be easily generated from within the `R scripts` of the functions. The website for the package was developed using `pkgdown` and was formatted based on the `fable` package. 
+
+>The package can be found on the [Github repository](https://github.com/mohammedfaizan0014/dress) and on its [webpage](https://mohammedfaizan0014.github.io/dress/index.html).
+
+#### Package Structure
+
+
+```{r fig.cap="File structure of the package"}
+knitr::include_graphics(here::here("analysis/figure/fs.png"))
+```
+
+#### Testing
+
+Important measures were taken to test the robustness of the framework. This included two tests which checked for the returned output from these two functions to be `DRisk`. It was found that there was a coding mistake in the original functions and it was fixed.
+
+Tests:
+- `Class of Parameters Drscore`
+- `Class of Parameters Update`
+
+Another measure included checking for the class of input parameters. This allows for saving the user's time when wrong parameters are supplied. These assertions are given below.
+
+```{r eval=FALSE,echo=TRUE}
+    #testing parameter classes
+    assertthat::assert_that(is.data.frame(Sample))
+    assertthat::assert_that(is.data.frame(Protected)|is.matrix(Protected)|is.array(Protected))
+    assertthat::assert_that(assertthat::noNA(Sample), assertthat::noNA(Protected))
+    assertthat::assert_that(neighbourhood %in% c(1:4),
+                            msg = "Only 4 neighbourhood present. Only 1,2,3 or 4 options allowed for neighbourhood")
+    assertthat::assert_that(neigh_type %in% c("constant","prob","estprob"),
+                            msg = "Only 3 neighbourhood types present,constant, prob, estprob.")
+```
+
+
+#### R CMD Check and Github Actions
+
+Github Actions was incorporated into the the package development to automatically check for problems with package. The current version has passed the `R CMD Check` without any error, warning or notes.
+
+
+
+## Shiny Dashboard
+
+We developed a shiny dashboard to illustrate the use of this framework.This interactive dashboard presented many challenges in its development stage as the functions had to be modified. Due to the re-activity involved with shiny applications it was difficult to find the location of the errors. Nevertheless, these issues were overcome and the shiny dashboard was developed. 
+
+> The following files contained the shiny dashboard and were used to deploy it on `shinyapp.io` platform. Try the dashboard [here](https://mohammed-mohammed-faizan.shinyapps.io/dress/)
+
+```{r fig.cap="Files building the Shiny App"}
+knitr::include_graphics(here::here("analysis/figure/fsshiny.png"))
+```
+
+#### See Code
+
+```{r eval=FALSE, echo=TRUE,drop2=TRUE,results="markup"}
+
+#ui.R
+library(shiny)
+library(shinyalert)
+library(shinyWidgets)
+library(shinythemes)
+library(shinyfullscreen)
+library(bs4Dash)
+library(shinycssloaders)
+library(shinyFiles)
+library(shinyjs)
+library(waiter)
+library(htmltools)
+library(shinyBS)
+
+library(DT)
+library(gt)
+library(tidyverse)
+library(plotly)
+library(here)
+library(scales)
+library(gghighlight)
+library(ggthemes)
+library(crosstalk)
+library(flexdashboard)
+
+# 
+# source(here::here("analysis/DisclosureRisk.R"))
+# source(here::here("analysis/DRisk_update.R"))
+
+ui <- dashboardPage(
+  preloader = list(html = tagList(spin_1(), "Loading ...")),
+  title = "Disclosure Risk Assessment",
+  fullscreen = TRUE,
+  header = dashboardHeader(
+    title = dashboardBrand(
+      title = "dress",
+      color = "primary",
+      href = "https://github.com/mohammedfaizan0014/dress",
+      image = icon("github"),
+      opacity=1
+    ),
+    skin = "light",
+    status = "white",
+    border = TRUE,
+    sidebarIcon = icon("bars"),
+    controlbarIcon = icon("th"),
+    fixed = FALSE
+  ), #header
+  ## Sidebar content
+  sidebar = bs4DashSidebar(
+    skin = "light",
+    status = "primary",
+    elevation = 3,
+    sidebarUserPanel(
+      image = "dashboard.svg",
+      name = "Measure Disclosure Risk"
+    ),
+    sidebarMenu(id="sidebar",
+                sidebarHeader("Data and Parameters"),
+                menuItem("About", tabName = "about", icon = ionicon(name="information-circle")),
+                menuItem("Help Center", tabName = "help", icon = ionicon(name="information-circle")),
+                menuItem("Contact Us", tabName = "contact", icon = ionicon(name="call")),
+                menuItem("FAQ", tabName = "faq", icon = ionicon(name="help-circle")),
+                menuItem("drscore", tabName = "drscore", icon = ionicon(name="arrow-forward"),selected=TRUE),
+                menuItem("Sample Data", tabName = "sample", icon = ionicon(name="arrow-forward")),
+                menuItem("Protected Data", tabName = "protected", icon = ionicon(name="arrow-forward"))
+
+    )
+  ), #sidebar
+  footer = dashboardFooter(
+    left = a(
+      href = "bradleyw@uow.edu.au",
+      target = "_blank", "Copyright © Bradley Wakefield",a(
+        href = "https://www.uow.edu.au/",
+        target = "_blank", ", University of Wollongong"
+      )
+    ),
+    right =  actionButton("twitter_share", label = "", icon = icon("twitter"),style='padding:5px',
+                          onclick = sprintf("window.open('%s')",
+                                            "https://twitter.com/intent/tweet?text=%20@UOW%20Share%20drscore&url=https://github.com/mohammedfaizan0014/dress&hashtags=DisclosureRisk"))
+  ), #footer
+  body  = dashboardBody(
+    #tags$head(includeScript(here::here("js/baidu_analysis.js"))),
+    tabItems(
+      tabItem(tabName = "drscore",
+              fluidRow(
+                box(title="Disclore Risk Information",solidHeader=TRUE,status='primary',background = "white", width=8,
+                    fluidRow(
+                      column(6,
+                             uiOutput("rsam"),
+                             gaugeOutput("risksample", width = "100%", height = "200px")
+                             ),
+                      column(6,
+                             uiOutput("osam"),
+                             gaugeOutput("riskoutlier", width = "100%", height = "200px"))
+                    ),
+                    #fluidPage(uiOutput("intro")),
+                    gt_output("linkcounts"),
+                    uiOutput("hline"),
+                    fluidRow(
+                      valueBoxOutput("distinct"),
+                      valueBoxOutput("estimated"),
+                      valueBoxOutput("undeniable")
+
+                    ),
+                    box(title="Category Level Disclosure Risk:",solidHeader=TRUE,status='primary',background = "white", width=12,
+
+                        dataTableOutput("LinkScore_Levels",width = "95%", height = "60%")
+                    ) #box
+                    ), #box
+                #tags$hr(),
+                box(width=4,
+                    # Input: Select a file ----
+                    actionBttn(
+                      inputId = "rune",
+                      label = "run example",
+                      style = "fill",
+                      color = "warning",
+                      size = "sm",
+                    ),
+                    tags$hr(),
+                    #Sample
+                    tags$h5("Upload Sample Data (csv files only)"),
+                    actionBttn(
+                      inputId = "show",
+                      label = "view example file",
+                      style = "fill",
+                      color = "primary",
+                      size = "sm",
+                    ),
+                    tags$br(),
+                    tags$br(),
+                    fileInput("sample",NULL,
+                              multiple = FALSE,
+                              accept = ".csv"),
+                    #Protected
+                    tags$h5("Upload Protected/Released Data (csv files only)"),
+                    actionBttn(
+                      inputId = "show1",
+                      label = "view example file",
+                      style = "fill",
+                      color = "primary",
+                      size = "sm",
+                    ),
+                    tags$br(),
+                    tags$br(),
+                    fileInput("protected",NULL,
+                              multiple = FALSE,
+                              accept = ".csv"),
+                    #delta
+                    numericInput("delta", "Delta", value=0.05, min=0, max=5),
+                    #neighbourhood
+                    selectInput('neighbourhood', 'neighbourhood',
+                                c("Mahalanobis",
+                                  "DSTAR",
+                                  "StdEuclid",
+                                  "RelEuclid"),
+                                selected = "Mahalanobis"),
+                    #kdistinct
+                    numericInput("kdistinct", "kdistinct", value=5, min=0, max=5),
+                    #ldeniable
+                    numericInput("ldeniable", "ldeniable", value=0.05, min=0, max=5),
+                    #neigh_type
+                    selectInput('neigh_type', 'neigh_type',
+                                c("constant",
+                                  "prob",
+                                  "estprob"),
+                                selected = "constant"),
+                    #numeric.vars
+                    textInput('nvar1ip', 'Enter numeric variable names (comma delimited)', "NULL"),
+                    textInput('nvar2ip', 'Enter position of numeric variable name (comma delimited)', "NULL"),
+                    numericRangeInput(
+                      inputId = "nvar3ip", label = "Enter range of numeric variable:",
+                      value = NULL,
+                      min=1,
+                      step = 1
+                    ),
+                    # outlier.par = list(centre = median,
+                    #                    scale = var,
+                    #                    thresh = 0.01)
+                    #centre
+                    # selectInput('centre', 'centre',
+                    #             c("median",
+                    #               "mean"),
+                    #             selected = "median"),
+                    # #scale
+                    # selectInput('scale', 'scale',
+                    #             c("var",
+                    #               "sd"),
+                    #             selected = "var"),
+                    #thresh
+                    numericInput("thresh","thresh", value=0.01, min=0, max=5),
+
+                    #buttons drscore and update
+                    actionButton("drscore", "drscore"),
+                    actionButton("update", "update"),
+                    dropdownButton(
+                      downloadBttn(
+                        outputId = "linkcountd",
+                        label="Linkcounts",
+                        style = "fill",
+                        color = "success",
+                        #size='sm',
+                        block=TRUE
+                      ),
+                      downloadBttn(
+                        outputId = "linkscored",
+                        label="Linkscores",
+                        style = "fill",
+                        color = "success",
+                        #size='sm',
+                        block=TRUE
+                      ),
+                      downloadBttn(
+                        outputId = "LinkScore_Levelsd",
+                        label="LinkScore_Levels",
+                        style = "fill",
+                        color = "success",
+                        #size='sm',
+                        block=TRUE
+                      ),
+                      circle=FALSE,
+                      label="Download Results",
+                      status="success"
+                    ) #dropdown btn
+                ) #box
+      ) #fluid row
+
+      ), #tabItem
+      tabItem(tabName = "about",
+              fluidRow(box(width=12,
+                           title="About",solidHeader=TRUE,status='primary',background = "white",height="100%",
+                           tags$h2("Help Center"),
+                           tags$hr(),
+                           tags$p(""),
+                           tags$img(src="x1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="format.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="heatmap1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="show.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="heatmap2.png"),
+                           tags$img(src="show1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="settings.png",width="50%",height="50%")
+
+              )
+              )
+      ),
+      tabItem(tabName = "help",
+              fluidRow(box(width=12,
+                           title="Help Center",solidHeader=TRUE,status='primary',background = "white",height="100%",
+                           tags$h2("Help Center"),
+                           tags$hr(),
+                           tags$p(""),
+                           tags$img(src="x1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="format.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="heatmap1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="show.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="heatmap2.png"),
+                           tags$img(src="show1.png",width="50%",height="50%"),
+                           tags$p(""),
+                           tags$img(src="settings.png",width="50%",height="50%")
+
+              )
+              )
+      ),
+      tabItem(tabName = "contact",
+              fluidRow(box(width=12,
+                           title="Contact Us",solidHeader=TRUE,status='primary',background = "white",height=800,
+                           tags$p(""),
+                           tags$p("")
+              ))
+      ),
+      tabItem(tabName = "faq",
+              fluidRow(box(width=12,
+                           title="FAQ",solidHeader=TRUE,status='primary',background = "white",height=800,
+                           tags$h2("FAQ"),
+                           tags$hr(),
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p(""),
+                           tags$p("")
+              )
+              )
+      ), #tabItem
+      tabItem(tabName="sample",
+              dataTableOutput("sample",width = "100%", height = "100%")),
+      tabItem(tabName="protected",
+              dataTableOutput("protected",width = "100%", height = "100%"))
+    ) #tabItem
+  ) #dashboardbody
+) #ui
+
+
+#server.R
+library(shiny)
+library(shinyalert)
+library(shinyvalidate)
+library(shinyWidgets)
+library(shinythemes)
+
+library(DT)
+library(gt)
+library(tidyverse)
+library(plotly)
+library(here)
+library(scales)
+library(gghighlight)
+library(ggthemes)
+library(crosstalk)
+library(flexdashboard)
+
+
+source(here::here("analysis/DisclosureRisk.R"))
+source(here::here("analysis/DRisk_update.R"))
+
+server <- function(input, output, session) {
+
+  shinyalert("Welcome",
+             "Welcome to Disclosure Risk Assessment Dashboard!",
+             type = "info",
+             timer = 10000)
+
+  #input files
+  sampletemp <- reactive({
+    file <- input$sample
+    read.csv(file$datapath,TRUE)
+  })
+  protectedtemp <-  reactive({
+    file2 <- input$protected
+    read.csv(file2$datapath,TRUE)
+  })
+
+
+
+  #
+  #   output$intro <- renderUI({
+  #
+  #     tagList(tags$h3("Disclosure Risk Assessment"),
+  #             tags$hr(),
+  #             tags$h4("Threshold Neighbourhood with parameters: "),
+  #             #tags$img(height = 300 , width = 812, src = ""),
+  #             tags$br(),
+  #             tags$p("delta, kdistinct, ldeniable:"), input$delta, input$kdistinct, input$ldeniable,
+  #             tags$hr())
+  #   })
+
+
+
+
+
+
+  # numeric.vars = 1:4, #Which Variables are continuous?
+  #sample <- input$sample #are variables from sample?
+  nvar <- reactive({
+
+    if(input$nvar1ip=="NULL"){
+      nvar1ip <- NULL
+    }
+    else{
+      nvar1ip <- as.character(unlist(strsplit(input$nvar1ip,","))) #names of cont variables
+    }
+
+    if(input$nvar2ip=="NULL"){
+      nvar2ip <- NULL
+    }
+    else{
+      nvar2ip <- NULL
+      places <- as.numeric(unlist(strsplit(input$nvar2ip,","))) #position of cont variables
+      for (i in 1:length(places)) {
+        if(!is.na(places[i])){
+          nvar2ip <- append(nvar2ip,places[i])
+        }
+      }
+
+      #nvar2ip <- as.numeric(unlist(strsplit(input$nvar2ip,","))) #position of cont variables
+    }
+
+    if(is.null(input$nvar3ip)){
+      nvar3ip <- NULL
+    }
+    else{
+      nvar3ip <- c(input$nvar3ip[1]:input$nvar3ip[2]) #range of cont variables
+    }
+
+    # picking only nvar strings in sample
+    nvar1ipp <- NULL
+    if(!is.null(nvar1ip)){
+      for (i in 1:length(nvar1ip)) {
+        if(nvar1ip[i] %in% colnames(sampletemp())){
+          nvar1ipp <- append(nvar1ipp,nvar1ip[i])
+        }
+      }
+    }
+
+
+    # picking only nvar numbers in sample
+    nvar2ipp <- NULL
+    if(!is.null(nvar2ip)){
+      for (i in 1:length(nvar2ip)) {
+        if(nvar2ip[i] <= length(colnames(sampletemp())) & nvar2ip[i] > 0){
+          nvar2ipp <- append(nvar2ipp,nvar2ip[i])
+        }
+      }
+    }
+
+
+
+    # picking only nvar numbers range in sample
+    nvar3ipp <- NULL
+    if(!is.null(nvar3ip)){
+      for (i in 1:length(nvar3ip)) {
+        if(nvar3ip[i] <= length(colnames(sampletemp()))){
+          nvar3ipp <- append(nvar3ipp,nvar3ip[i])
+        }
+      }
+    }
+
+
+
+
+    nvar1ipCols <- sampletemp() %>% dplyr::select(nvar1ipp) %>% colnames()
+    nvar2ipCols <- sampletemp()%>% dplyr::select(nvar2ipp) %>% colnames()
+    nvar3ipCols <- sampletemp() %>% dplyr::select(nvar3ipp) %>% colnames()
+    nvar <- unique(append(append(nvar1ipCols,nvar2ipCols),nvar3ipCols))
+    if(length(nvar)==0) nvar <- NULL
+    return(nvar)
+  })
+
+
+
+
+
+  neighbourhood <- 1
+  neighbourhood <- reactive(case_when(
+    input$neighbourhood=="Mahalanobis"~1,
+    input$neighbourhood=="DSTAR"~2,
+    input$neighbourhood=="StdEuclid"~3,
+    input$neighbourhood=="RelEuclid"~4,
+    TRUE ~ 1))
+
+
+  output$colname <- renderPrint({
+    colnames(sampletemp())
+    neighbourhood()
+  }
   )
+
+  observeEvent(input$drscore,{
+
+
+
+    if(is.null(input$sample) | is.null(input$protected)){
+
+      shinyalert(title = "Please upload the Data")
+      observeEvent(input$update, {
+
+        if(is.null(input$sample) | is.null(input$protected)){
+
+          shinyalert(title = "Please upload the Data",
+                     text = "We couldn't find the DRisk Object, please try drscore")
+        }
+      })
+    }
+
+    else{
+
+      observeEvent(input$update, {
+
+        if(is.null(input$sample) | is.null(input$protected)){
+
+          shinyalert(title = "Please upload the Data",
+                     text = "We couldn't find the DRisk Object, please try drscore")
+        }
+      })
+
+      #checking if all nvar is numeric
+      if(is.null(nvar())){
+        shinyalert(title = "Incorrect Numeric Variables!",
+                   text = "Data must have atleast one numeric variable")
+
+      }
+      else if(!is.null(nvar())){
+        numvartemp <- sampletemp() %>% dplyr::select(nvar())
+        sizenumvartemp <- length(nvar())
+
+        for(i in 1:sizenumvartemp){
+          if(!(is.numeric(numvartemp[,i]))){
+            shinyalert(title = "Incorrect Numeric Variables!")
+          }
+        }
+      }
+      if(!is.null(nvar())){
+        nn <- drscore(Sample = sampletemp(),
+                      Protected = protectedtemp(),
+                      delta = input$delta,
+                      kdistinct = input$kdistinct,
+                      ldeniable = input$ldeniable,
+                      neighbourhood = neighbourhood(),
+                      neigh_type = input$neigh_type,
+                      numeric.vars = nvar(),
+                      outlier.par = list(centre = median,
+                                         scale = var,
+                                         thresh = input$thresh))
+        
+        output$rsam <- renderUI({
+          tags$h5("Delta Disclosure Risk of Sample")
+        })
+        linkscore <- nn$Linkscore %>%
+          mutate(InvValues=(1-Values)*100)
+        output$risksample <- renderGauge({
+          gauge(linkscore[,2][1], min = 0, max = 100, symbol = '%', gaugeSectors(
+            success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+          ))#gauge
+        })
+
+        output$osam <- renderUI({
+          tags$h5("Delta Disclosure Risk of Sample Outliers")
+        })
+        output$riskoutlier <- renderGauge({
+          gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
+            success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+          ))#gauge
+        })
+
+        linkcounts <- nn$Linkcounts
+        output$linkcounts <- render_gt({
+          linkcounts  %>%
+            mutate(`Values`=scales::comma(as.numeric(`Values`))) %>%
+            gt(rownames_to_stub=TRUE,rowname_col="") %>%
+            tab_header(title = "Linkcounts",
+                       subtitle = "Key Diifferences in Observations") %>%
+            #tab_source_note(md("drscore")) %>%
+            cols_align(
+              align = c("right"),
+              columns = c(`Values`)
+            )
+        })
+
+         output$distinct <-  renderValueBox({
+           bs4Dash::valueBox(
+            subtitle= "Proportion Distinct",
+            value=scales::percent(linkscore[,1][3]),
+            icon = icon("percent"),
+            width = 12
+          )
+        })
+
+        output$estimated <-  renderValueBox({
+          bs4Dash::valueBox(
+            subtitle="Proportion Estimated",
+            value=scales::percent(linkscore[,1][4]),
+            icon = icon("percent"),
+            width = 12
+          )
+        })
+
+        output$undeniable <-  renderValueBox({
+          bs4Dash::valueBox(
+            value=scales::percent(linkscore[,1][5]),
+            subtitle="Proportion Undeniable",
+            icon = icon("percent"),
+            width = 12
+          )
+        })
+
+        LinkScore_Levels <- nn$LinkScore_Levels %>%
+          mutate_if(is.numeric, round,2)
+        output$LinkScore_Levels <- renderDataTable({
+          LinkScore_Levels %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                                         caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Category Level Disclosure Risk: '),
+                                         rownames = TRUE,
+                                         options = list(searching = TRUE,pageLength = 10,scrollY=TRUE, scrollX = TRUE))
+        })
+
+        output$linkcountd <- downloadHandler(
+          filename=function() {
+            paste("linkcounts-", Sys.Date(), ".csv", sep="")
+          },
+          content = function(file){
+            write.csv(linkcounts,file)
+          }
+        )
+
+        output$linkscored <- downloadHandler(
+          filename=function() {
+            paste("linkscores-", Sys.Date(), ".csv", sep="")
+          },
+          content = function(file){
+            write.csv(linkscore,file)
+          }
+        )
+
+        output$LinkScore_Levelsd <- downloadHandler(
+          filename=function() {
+            paste("LinkScore_Levels-", Sys.Date(), ".csv", sep="")
+          },
+          content = function(file){
+            write.csv(LinkScore_Levels,file)
+          }
+        )
+
+
+
+        observeEvent(input$update, {
+
+          if(is.null(input$sample) | is.null(input$protected)){
+
+            shinyalert(title = "Please upload the Data",
+                       text = "We couldn't find the DRisk Object, please try drscore")
+          }
+
+          else{
+            nnupdate <- updateDRisk(DRisk=nn,
+                                    delta = input$delta,
+                                    kdistinct = input$kdistinct,
+                                    ldeniable = input$ldeniable,
+                                    neighbourhood = neighbourhood(),
+                                    neigh_type = input$neigh_type,
+                                    numeric.vars = nvar(),
+                                    outlier.par = input$thresh)
+
+            output$rsam <- renderUI({
+              tags$h5("Delta Disclosure Risk of Sample")
+            })
+            linkscore <- nnupdate$Linkscore %>%
+              mutate(InvValues=(1-Values)*100)
+            output$risksample <- renderGauge({
+              gauge(linkscore[,2][1], min = 0, max = 100, symbol = '%', gaugeSectors(
+                success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+              ))#gauge
+            })
+            
+            output$osam <- renderUI({
+              tags$h5("Delta Disclosure Risk of Sample Outliers")
+            })
+            output$riskoutlier <- renderGauge({
+              gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
+                success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+              ))#gauge
+            })
+
+            linkcounts <- nnupdate$Linkcounts
+            output$linkcounts <- render_gt({
+              linkcounts %>%
+                mutate(`Values`=scales::comma(as.numeric(`Values`))) %>%
+                gt(rownames_to_stub=TRUE,rowname_col="") %>%
+                tab_header(title = "Linkcounts",
+                           subtitle = "Key Diifferences in Observations") %>%
+                #tab_source_note(md("drscore")) %>%
+                cols_align(
+                  align = c("right"),
+                  columns = c(`Values`)
+                )
+            })
+
+            output$distinct <-  renderValueBox({
+              bs4Dash::valueBox(
+                subtitle= "Proportion Distinct",
+                value=scales::percent(linkscore[,1][3]),
+                icon = icon("percent"),
+                width = 12
+              )
+            })
+
+            output$estimated <-  renderValueBox({
+              bs4Dash::valueBox(
+                subtitle="Proportion Estimated",
+                value=scales::percent(linkscore[,1][4]),
+                icon = icon("percent"),
+                width = 12
+              )
+            })
+
+            output$undeniable <-  renderValueBox({
+              bs4Dash::valueBox(
+                value=scales::percent(linkscore[,1][5]),
+                subtitle ="Proportion Undeniable",
+                icon = icon("percent"),
+                width = 12
+              )
+            })
+
+            LinkScore_Levels <- nnupdate$LinkScore_Levels %>%
+              mutate_if(is.numeric, round,2)
+            output$LinkScore_Levels <- renderDataTable({
+              LinkScore_Levels %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                                             caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Category Level Disclosure Risk: '),
+                                             rownames = TRUE,
+                                             options = list(searching = TRUE,pageLength = 10,scrollY=TRUE, scrollX = TRUE))
+            })
+
+            output$linkcountd <- downloadHandler(
+              filename=function() {
+                paste("linkcounts-", Sys.Date(), ".csv", sep="")
+              },
+              content = function(file){
+                write.csv(linkcounts,file)
+              }
+            )
+
+            output$linkscored <- downloadHandler(
+              filename=function() {
+                paste("linkscores-", Sys.Date(), ".csv", sep="")
+              },
+              content = function(file){
+                write.csv(linkscore,file)
+              }
+            )
+
+            output$LinkScore_Levelsd <- downloadHandler(
+              filename=function() {
+                paste("LinkScore_Levels-", Sys.Date(), ".csv", sep="")
+              },
+              content = function(file){
+                write.csv(LinkScore_Levels,file)
+              }
+            )
+
+
+          } #else
+
+        }) #observeEvent update
+      } #else
+
+
+    } #else
+
+
+
+
+  }) #observeEvent drscore
+
+
+    observeEvent(input$update, {
+
+      if(input$drscore==0){
+        shinyalert(title = "Get the drscore!",
+                   text = "We couldn't find the DRisk Object, please try drscore")
+      }
+
+      })
+
+
+
+
+
+  output$hline <- renderUI({
+
+    tagList(
+      tags$br(),
+      tags$hr(),
+      tags$br())
+  })
+
+
+
+  output$sample <-  renderDataTable({
+    file <- input$sample
+    ext <- tools::file_ext(file$datapath)
+
+    req(file)
+    validate(need(ext == "csv", "Please upload a csv file"))
+
+    read.csv(file$datapath, TRUE) %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                             caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Sample Data'),
+                             rownames = TRUE,
+                             options = list(searching = TRUE,pageLength = 25,scrollY=TRUE, scrollX = TRUE))
+  })
+
+
+
+  output$protected <-  renderDataTable({
+    file2 <- input$protected
+    ext <- tools::file_ext(file2$datapath)
+
+    req(file2)
+    validate(need(ext == "csv", "Please upload a csv file"))
+
+    read.csv(file2$datapath) %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                                                                   caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Protected Data'),
+                                                                   rownames = TRUE,
+                                                                   options = list(searching = TRUE,pageLength = 25,scrollY=TRUE, scrollX = TRUE))
+  })
+
+  CASC_sample <- read.csv("CASC_sample.csv")
+  dataModal <- function(failed = FALSE) {
+    modalDialog(
+      renderTable(head(CASC_sample),rownames=TRUE),
+      easyClose=TRUE,
+      footer = tagList(
+        modalButton("Close")
+      )
+    )
+  }
+
+  # Show modal when button is clicked.
+  observeEvent(input$show, {
+    showModal(dataModal())
+  })
+
+  CASC_protected <- read.csv("CASC_protected.csv")
+  dataModalx <- function(failed = FALSE) {
+    modalDialog(
+      renderTable(head(CASC_protected),rownames=TRUE),
+      easyClose=TRUE,
+      footer = tagList(
+        modalButton("Close")
+      )
+    )
+  }
+
+  # Show modal when button is clicked.
+  observeEvent(input$show1, {
+    showModal(dataModalx())
+  })
+
+  # Example
+  observeEvent(input$rune, {
+    nneg <- drscore(Sample = CASC_sample,
+                  Protected = CASC_protected,
+                  delta = 0.05,
+                  kdistinct = 0.05,
+                  ldeniable = 5,
+                  neighbourhood = 1,
+                  neigh_type = 'prob',
+                  numeric.vars = 1:4,
+                  outlier.par = list(centre = median,
+                                     scale = var,
+                                     thresh = 0.01))
+    
+    output$rsam <- renderUI({
+      tags$h5("Delta Disclosure Risk of Sample")
+    })
+    linkscore <- nneg$Linkscore %>%
+      mutate(InvValues=(1-Values)*100)
+    output$risksample <- renderGauge({
+      gauge(round(linkscore[,2][1],2), min = 0, max = 100, symbol = '%', gaugeSectors(
+        success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+      ))#gauge
+    })
+
+    output$osam <- renderUI({
+      tags$h5("Delta Disclosure Risk of Sample Outliers")
+    })
+    output$riskoutlier <- renderGauge({
+      gauge(round(linkscore[,2][2],2), min = 0, max = 100, symbol = '%', gaugeSectors(
+        success = c(80, 100), warning = c(40,79), danger = c(0, 39)
+      ))#gauge
+    })
+
+
+    linkcounts <- nneg$Linkcounts
+    output$linkcounts <- render_gt({
+
+      linkcounts %>%
+        mutate(`Values`=scales::comma(as.numeric(`Values`))) %>%
+        gt(rownames_to_stub=TRUE,rowname_col="") %>%
+        tab_header(title = "Linkcounts",
+                   subtitle = "Key Diifferences in Observations") %>%
+        #tab_source_note(md("drscore")) %>%
+        cols_align(
+          align = c("right"),
+          columns = c(`Values`)
+        )
+    })
+
+    output$distinct <-  renderValueBox({
+      bs4Dash::valueBox(
+        subtitle= "Proportion Distinct",
+        value=scales::percent(linkscore[,1][3]),
+        icon = icon("percent"),
+        width = 12
+      )
+    })
+
+    output$estimated <-  renderValueBox({
+      bs4Dash::valueBox(
+        subtitle="Proportion Estimated",
+        value=scales::percent(linkscore[,1][4]),
+        icon = icon("percent"),
+        width = 12
+      )
+    })
+
+    output$undeniable <-  renderValueBox({
+      bs4Dash::valueBox(
+        value=scales::percent(linkscore[,1][5]),
+        subtitle="Proportion Undeniable",
+        icon = icon("percent"),
+        width = 12
+      )
+    })
+
+    LinkScore_Levels <- nneg$LinkScore_Levels %>%
+      mutate_if(is.numeric, round,2)
+    output$LinkScore_Levels <- renderDataTable({
+
+      LinkScore_Levels %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                               caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Category Level Disclosure Risk: '),
+                               rownames = TRUE,
+                               options = list(searching = TRUE,pageLength = 10,scrollY=TRUE, scrollX = TRUE))
+    })
+
+    output$linkcountd <- downloadHandler(
+      filename=function() {
+        paste("linkcounts-", Sys.Date(), ".csv", sep="")
+      },
+      content = function(file){
+        write.csv(linkcounts,file)
+      }
+    )
+
+    output$linkscored <- downloadHandler(
+      filename=function() {
+        paste("linkscores-", Sys.Date(), ".csv", sep="")
+      },
+      content = function(file){
+        write.csv(linkscore,file)
+      }
+    )
+
+    output$LinkScore_Levelsd <- downloadHandler(
+      filename=function() {
+        paste("LinkScore_Levels-", Sys.Date(), ".csv", sep="")
+      },
+      content = function(file){
+        write.csv(LinkScore_Levels,file)
+      }
+    )
+
+
+
+    output$sample <-  renderDataTable({
+      CASC_sample %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                    caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Example: CASC Sample Data'),
+                    rownames = TRUE,
+                    options = list(searching = TRUE,pageLength = 25,scrollY=TRUE, scrollX = TRUE))
+    })
+
+    output$protected <-  renderDataTable({
+      CASC_protected %>% datatable(escape = FALSE, class = 'cell-border stripe',
+                    caption = htmltools::tags$caption (style = 'caption-side: top; text-align: center;
+                                                              color: black; font-family: Arial;
+                                                              font-size: 150% ;', 'Example: CASC Protected Data'),
+                    rownames = TRUE,
+                    options = list(searching = TRUE,pageLength = 25,scrollY=TRUE, scrollX = TRUE))
+    })
+
+    }) #example
+
+
+}
+
+shinyApp(ui, server)
+
 ```
 
 
 
+```{r eval=FALSE,echo = FALSE, cache=FALSE}
+library(shiny)
+shinyAppDir(
+  appDir=here::here("dress"),
+  options = list(width = "100%", height = 700)
+)
+```
+
+#### The User Interface
+
+The results the from disclosure framework are contained in 3 dataframes: <br/>
+- **linkcounts** : the numeric details of data and key differences <br/>
+- **linkscores** : disclosure risk percentages <br/>
+- **LinkScore_Levels** : key categoriacal combination of variables and their disclosure risk percentages <br/>
+
+
+There are no graphics involved in this shiny dashboard and one of the challenges was to make this dashboard visually appealing. Therefore, user interactivity had be taken into consideration to make the work more presentable with the folllowing elements added:
+
+- **Dynamic navigation bar**: *About, Help, Contact, Disclosure results, Data*
+
+```{r fig.cap="UI:Dynamic navigation bar"}
+knitr::include_graphics(here::here("analysis/gif/nav.gif"))
+```
+
+- **Aesthetic output**: *title, gauges, static gt table, value boxes, interactive data table in one place* <br/>
+
+> Note: disclosure risk percentages are inversed in the gauges. Green color shows that the data is safe to be released which means the disclosure risk of sample is less than 11.3%.
+
+```{r fig.cap="UI:Output Window"}
+knitr::include_graphics(here::here("analysis/gif/op.gif"))
+```
+
+- **Control box**: *user inter-activity via input parameters to framework functions, action buttons for disclosure results, run example button and viewing example data and download results option.* <br/>
+
+
+```{r fig.cap="UI:Control box"}
+knitr::include_graphics(here::here("analysis/gif/con.gif"))
+```
+
+- **Light and Dark Mode** <br/>
+
+```{r fig.cap="Themes: Light and Dark"}
+knitr::include_graphics(here::here("analysis/gif/ld.gif"))
+```
+
+- **Full-screen option** <br/>
+
+- **Sharing button** <br/>
+
+#### Issues with Reactivity and Robust Input Parameters
+
+- **update**
+
+The `update` function in this framework is used when the user wants to change some of the parameters. The basic idea is to save computation time on re-calculating the distances, based on the neighbourhood, from the `drscore`. However, since all of the parameters are reactive input to `update`, it made no sense have an additional function `update` as it would be the same as `drscore`. To accomodate for this change, `update` was modified to to calculate distances only when the neighbourhood from `DRisk` object from `drscore` was different from the new neighbourhood input.
+
+- **Handling Numeric Variable**
+
+The numeric variables can be given by the user in combination of three different methods,
+
+- name of the numeric variables
+- position of the numeric variables
+- range of the numeric variables
+
+*Illustration*: 
+
+```{r}
+summary(wage4)
+```
+
+```{r fig.cap="Handling Numeric Variables"}
+knitr::include_graphics(here::here("analysis/gif/nvar.png"))
+knitr::include_graphics(here::here("analysis/gif/nvare.png"))
+```
+
+
+
+
+The code took these combination of input and supplied to the framework functions, only the variables that were actually present in the data set. For example, variables names not in the data-set are dropped, out of bound, that is position of the numeric variables that is greater than the number of variables in the data-set are not included. Additionally, supplied numeric variables are validated in the update function and only numeric variables from the given list are used.However, shiny still pops an alert if any of the supplied variables are not numeric.  
+This saves computation time for the function in case of errors due to non-existence of such variables in the data-set or non-numeric variables supplied as numeric. Additionally, a pop-up is generated when no numeric variables are given, as the disclosure framework assumes at least one continuous variable in the data-set. 
+
+- **Pop-Up Messages**
+
+  - **Data**
+
+```{r fig.cap="Pop-Up: No Data Entered"}
+knitr::include_graphics(here::here("analysis/gif/data.gif"))
+```
+
+  - **Numeric Variables**
+
+```{r fig.cap="Pop-Up: Numeric Variables Error"}
+knitr::include_graphics(here::here("analysis/gif/nvarerror.gif"))
+```
+
+  - **Update**
+  
+```{r fig.cap="Pop-Up: Update without drscore"}
+knitr::include_graphics(here::here("analysis/gif/update.gif"))
+```
+
+- **Tooltips**: tootltips are an important guidance to understanding results and usage of the dashboard. These will be developed and embedded into the dashboard.
+
+# Conclusion
+
+The disclosure framework outlined in this work attempts to address one of the more considerable problems when using statistical protection methods on micro-data, how can we assess our released observations in a unifying way and ensure the released observations are safe? The question, although appearing quite straightforward is an extremely complex one. Micro-data protection methods are extremely varied and offer protection to different aspects of the data-set. Without knowing exactly how it is this data will be analaysed, linked and applied, as well as what people might consider to be private, assurances about the protection standard can be extremely hard to obtain.
+The solution proposed is a simple one, let us be completely clear what is meant by disclosure. If we can limit our perspective of disclosure to the three principles outlined in this framework, distinctness, accuracy and undeniability, we can then estimate the disclosive tendencies on protected data regardless of what mechanism was used to protect it.
+As presented earlier, the conditions used in our disclosure definition have individually been used in the existing literature as measures of privacy protection. However, the way in which these conditions interact has been largely under appreciated. By accounting for different aspects of uncertainty, we can apply disclosure calculations which previously would have individually garnered too high an estimate on the disclosure risk, but now collectively, give a more accurate depiction.
+This is not to say that an overstatement of disclosure risk is still not an issue within this framework. Any method which aims to unify and compare the complex range of methods in which statistical disclosure control is applied to micro-data would require a more conservative stance. This is due to the fact that a unifying method cannot completely discern whether consistencies between the original and protected data-sets happen simply by chance or by a failure of disclosure control. In order to completely ascertain this difference, information about the statistical disclosure control mechanism used would inevitably have to be applied.
+Nevertheless, one could argue that practically there is no real difference between a failure of disclosure control and a random consistency within original and protected data-sets. For instance, if an attacker was able to obtain an accurate estimate of a sensitive characteristic simply by random chance, no matter how unlikely this would have been to occur, does this still not constitute a disclosure? This is even more of an issue if the attacker was unaware of the lack of certainty in their estimate and (although unlikely) assumed a considerable degree of confidence. This perspective is ultimately adopted within this framework as Condition (2) of Defition 1 (Revisited) merely requires the existence of an accurate estimate to constitute a disclosure and not the tougher restriction that an accurate estimate would have to occur with some level of confidence.
+Regardless, the perspective of disclosure presented is fluid and is able to extend beyond the context of the problems presented strictly within this framework. For instance, we can extend our notion of disclosure further, as the uncertainty regarding the inclusion of an individual in the original sample to begin with is often overlooked. It is quite common for the mere act of participation in surveys and trials to be kept secret and as such disclosure risk calculations should reflect this fact. But population uncertainty (the uncertainty related to a random member of the population rather than a random respondent of the survey) is not usually reflected in existing disclosure metrics.
+Fortunately, the construction of our disclosure measure as an empirical probability allows for a fairly simple correction with an application of Bayes’ rule: P (Disclosed ∩ Sampled) = P(Disclosed|Sampled)P(Sampled). Therefore in order to correct for this population uncertainty, we need only account for the sampling design of the original sample. In the case of simple random sampling, this correction would simply be to multiply the obtained disclosure risk by the proportion of the population sampled. For more complicated stratified sampling designs, we could determine the disclosure risk on the various strata used in the sampling design, and use the appropriate corrections.
+This versatility is one of the many aspects of this framework still yet to be explored, as well as the inclusion of non-value sensitive characteristics. As the same conditions of disclosure from Definition 1 (Revisited) can be applied to aggregations and statistics, not just micro-level observations. This may be an avenue to explore attribute based disclosure as distinctness and undeniability are terms often applied in this context.
 Finally it is important to accept when it comes to understanding the disclosure risk of any release of data, a single measurement or parameter will never really be sufficient in itself to adequately represent the entire risk of disclosure that said release of information represents. The varying ways in which disclosure can happen through attribute properties, inferential properties and value estimation are often extremely complex and need to be treated as such. Nevertheless, the disclosure risk framework we propose can still be a useful tool in measuring disclosure risk by providing a more formalised and general approach to understanding disclosure.
 
-More information about mathematics behind measuring the disclosure risk  can be found in the paper [*On the Disclosure Risk Framework for Micro-Level Data*]() and in the [*pkgdown site*]().
+# References
 
+Agrawal, R. and R. Srikant (2000). Privacy-preserving data mining. SIGMOD Rec. 29 (2), 439–450.
+
+Burridge, J. (2003). Information preserving statistical obfuscation. Statistics and Comput- ing 13(4), 321–327.
+
+Caiola, G. and J. P. Reiter (2010). Random forests for generating partially synthetic, categorical data. Trans. Data Privacy 3 (1), 27–42.
+
+Dalenius, T. (1977). Towards a methodology for statistical disclosure control. Statistisk tidskrift 15, 429–444.
+
+Dalenius, T. and S. P. Reiss (1982). Data-swapping: A technique for disclosure control. Journal of Statistical Planning and Inference 6 (1), 73 – 85.
+
+de Wolf, P.-P. and K. Zeelenberg (2015). Challenges for statistical disclosure control in a world with big data and open data. In Proceedings of the 60th World Statistics Congress, Volume 60.
+
+Domingo-Ferrer, J. and J. M. Mateo-Sanz (2002). Practical data-oriented microaggregation for statistical disclosure control. IEEE Trans. on Knowl. and Data Eng. 14(1), 189–201.
+
+Domingo-Ferrer, J. and V. Torra (2004). Disclosure risk assessment in statistical data protection. Journal of Computational and Applied Mathematics 164, 285–293.
+
+Duncan, G. T. and D. Lambert (1986). Disclosure-limited data dissemination. Journal of the American Statistical Association 81(393), 10–18.
+
+Dwork, C. (2006). Differential privacy. In M. Bugliesi, B. Preneel, V. Sassone, and I. We- gener (Eds.), Automata, Languages and Programming: 33rd International Colloquium, ICALP 2006, Venice, Italy, July 10-14, 2006, Proceedings, Part II, pp. 1–12. Berlin, Heidelberg: Springer Berlin Heidelberg.
+
+Elliot, M. and J. Domingo-Ferrer (2018). The future of statistical disclosure control. Fuller, W. A. (1993). Masking procedures for microdata disclosure limitation. Journal of
+Official Statistics 9(2), 383–406.
+
+Fuller, W. A. (1993). Masking procedures for microdata disclosure limitation. Journal of
+Official Statistics 9(2), 383–406.
+
+Hu, J. (2018). Bayesian estimation of attribute and identification disclosure risks in syn- thetic data.
+
+Lin, Y.-X. (2014). Density approximant based on noise multiplied data. In J. Domingo- Ferrer (Ed.), Privacy in Statistical Databases: UNESCO Chair in Data Privacy, Inter- national Conference, PSD 2014, Ibiza, Spain, September 17-19, 2014. Proceedings, pp. 89–104. Springer International Publishing.
+
+Lin, Y.-X. and P. Wise (2012). Estimation of regression parameters from noise multiplied data. Journal of Privacy and Confidentiality 4 (2), 61–94.
+
+Mahalanobis, P. C. (1936). On the generalised distance in statistics. Proceedings of the National Institute of Sciences of India 2 (1), 49–55.
+
+Melville, N. and M. McQuaid (2012). Research note—generating shareable statistical databases for business value: Multiple imputation with multimodal perturbation. Info. Sys. Research 23(2), 559–574.
+
+
+Muralidhar, K. and R. Sarathy (2006). Data shuffling—a new masking approach for nu- merical data. Management Science 52(5), 658–670.
+
+Nin, J., J. Herranz, and V. Torra (2008). Rethinking rank swapping to decrease disclosure risk. Data & Knowledge Engineering 64(1), 346 – 364. Fourth International Conference on
+
+Ruiz, N., K. Muralidhar, and J. Domingo-Ferrer (2018). On the privacy guarantees of synthetic data: A reassessment from the maximum-knowledge attacker perspective. In J. Domingo-Ferrer and F. Montes (Eds.), Privacy in Statistical Databases, Cham, pp. 59–74. Springer International Publishing.
+
+Shlomo, N. (2010). Releasing microdata: Disclosure risk estimation, data masking and assessing utility. The Journal of Privacy and Confidentiality 2 (1), 73–91.
+
+Skinner, C. J. and M. J. Elliot (2002). A measure of disclosure risk for microdata. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 64 (4), 855–867.
+
+Taub, J., M. Elliot, M. Pampaka, and D. Smith (2018). Differential correct attribution prob- ability for synthetic data: An exploration. In J. Domingo-Ferrer and F. Montes (Eds.), Privacy in Statistical Databases, Cham, pp. 122–137. Springer International Publishing.
+
+Templ, M. (2017, 05). Statistical Disclosure Control for Microdata. Methods and Applica- tions in R. Springer.
+
+Truta, T. M., F. Fotouhi, and D. Barth-Jones (2003). Privacy and confidentiality manage- ment for the microaggregation disclosure control method: Disclosure risk and information loss measures. In Proceedings of the 2003 ACM Workshop on Privacy in the Electronic Society, WPES ’03, New York, NY, USA, pp. 21–30. Association for Computing Machinery.
+
+Willenborg, L. and T. de Waal (2001). Disclosure risk for tabular data. In Elements of Statistical Disclosure Control. Lecture Notes in Statistics, Volume 155, pp. 137–157. Springer, New York, NY.
+
+Willenborg, L. and T. De Waal (2012). Elements of statistical disclosure control. In Lecture Notes in Statistics, Volume 155. Springer New York.
+
+## R packages
+
+```{r, load_refs, echo=FALSE}
+library(RefManageR)
+bib <- ReadBib(here::here("analysis/packages.bib"), check = FALSE)
+ui <- "- "
+```
+
+```{r, print_refs, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+writeLines(ui)
+print(bib, 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+```
 
 
 # Appendix
@@ -211,7 +1568,7 @@ More information about mathematics behind measuring the disclosure risk  can be 
 
 #### Meaning of 'reasonably identifiable’
 
- The `Australain Bureau of Statistcs` define re-identification as:
+The `Australain Bureau of Statistcs` define re-identification as:
  
  "Re-identification occurs when the identity of a person or organisation is determined even though directly identifying information has been removed. This may be able to be done using other publicly or privately held information about the individual or organisation. This type of disclosure, or breach of confidentiality, that can occur when someone has access to either aggregate data (such as tables) or microdata (unit record data)."
 
@@ -223,6 +1580,10 @@ Whether an individual is ‘reasonably identifiable’ from particular informati
 - other information either held by or available to the APP entity that holds the information
 whether it is possible for the individual or entity that holds the information to identify the individual, using available resources (including other information available to that individual or entity). Where it may be possible to identify an individual using available resources, the practicability, including the time and cost involved, will be relevant to deciding whether an individual is ‘reasonably identifiable’
 - if the information is publically released, whether a reasonable member of the public who accesses that information would be able to identify the individual.
+
+#### Informed Consent
+
+Term related to the informing the person how, when and what data pertaining to that individual will be used, or released.
 
 
 

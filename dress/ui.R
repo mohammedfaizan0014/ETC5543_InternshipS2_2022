@@ -85,6 +85,9 @@ ui <- dashboardPage(
               fluidRow(
                 box(title="Disclore Risk Information",solidHeader=TRUE,status='primary',background = "white", width=8,
                     fluidRow(
+                      
+                      uiOutput("intro"),
+                      
                       column(6,
                              uiOutput("rsam"),
                              gaugeOutput("risksample", width = "100%", height = "200px")

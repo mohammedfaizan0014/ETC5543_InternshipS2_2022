@@ -38,17 +38,8 @@ server <- function(input, output, session) {
 
 
 
-  #
-  #   output$intro <- renderUI({
-  #
-  #     tagList(tags$h3("Disclosure Risk Assessment"),
-  #             tags$hr(),
-  #             tags$h4("Threshold Neighbourhood with parameters: "),
-  #             #tags$img(height = 300 , width = 812, src = "https://c.ndtvimg.com/2020-05/tpj5o4f8_cooking-_625x300_02_May_20.jpg"),
-  #             tags$br(),
-  #             tags$p("delta, kdistinct, ldeniable:"), input$delta, input$kdistinct, input$ldeniable,
-  #             tags$hr())
-  #   })
+
+
 
 
 
@@ -188,7 +179,6 @@ server <- function(input, output, session) {
       else if(!is.null(nvar())){
         numvartemp <- sampletemp() %>% dplyr::select(nvar())
         sizenumvartemp <- length(nvar())
-
         for(i in 1:sizenumvartemp){
           if(!(is.numeric(numvartemp[,i]))){
             shinyalert(title = "Incorrect Numeric Variables!")
@@ -208,8 +198,21 @@ server <- function(input, output, session) {
                                          scale = var,
                                          thresh = input$thresh))
         
+        
+        output$intro <- renderUI({
+          
+          tagList(tags$h3("Disclosure Risk Assessment"),
+                  tags$hr(),
+                  tags$h4("Threshold Neighbourhood with parameters: "),
+                  #tags$img(height = 300 , width = 812, src = "https://c.ndtvimg.com/2020-05/tpj5o4f8_cooking-_625x300_02_May_20.jpg"),
+                  tags$br(),
+                  tags$p("delta, kdistinct, ldeniable:"), round(nn$parameters$delta,2), round(nn$parameters$kdistinct,3), round(nn$parameters$ldeniable,3),
+                  tags$hr()
+                  )
+        })
+        
         output$rsam <- renderUI({
-          tags$h5("Delta Disclosure Risk of Sample")
+          tags$h5("Disclosure Risk of Sample")
         })
         linkscore <- nn$Linkscore %>%
           mutate(InvValues=(1-Values)*100)
@@ -220,7 +223,7 @@ server <- function(input, output, session) {
         })
 
         output$osam <- renderUI({
-          tags$h5("Delta Disclosure Risk of Sample Outliers")
+          tags$h5("Disclosure Risk of Sample Outliers")
         })
         output$riskoutlier <- renderGauge({
           gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
@@ -326,9 +329,21 @@ server <- function(input, output, session) {
                                     neigh_type = input$neigh_type,
                                     numeric.vars = nvar(),
                                     outlier.par = input$thresh)
+            
+            output$intro <- renderUI({
+              
+              tagList(tags$h3("Disclosure Risk Assessment"),
+                      tags$hr(),
+                      tags$h4("Threshold Neighbourhood with parameters: "),
+                      #tags$img(height = 300 , width = 812, src = "https://c.ndtvimg.com/2020-05/tpj5o4f8_cooking-_625x300_02_May_20.jpg"),
+                      tags$br(),
+                      tags$p("delta, kdistinct, ldeniable:"), round(nnupdate$parameters$delta,2), round(nnupdate$parameters$kdistinct,3), round(nnupdate$parameters$ldeniable,3),
+                      tags$hr()
+                      )
+            })
 
             output$rsam <- renderUI({
-              tags$h5("Delta Disclosure Risk of Sample")
+              tags$h5("Disclosure Risk of Sample")
             })
             linkscore <- nnupdate$Linkscore %>%
               mutate(InvValues=(1-Values)*100)
@@ -339,7 +354,7 @@ server <- function(input, output, session) {
             })
             
             output$osam <- renderUI({
-              tags$h5("Delta Disclosure Risk of Sample Outliers")
+              tags$h5("Disclosure Risk of Sample Outliers")
             })
             output$riskoutlier <- renderGauge({
               gauge(linkscore[,2][2], min = 0, max = 100, symbol = '%', gaugeSectors(
@@ -541,9 +556,20 @@ server <- function(input, output, session) {
                   outlier.par = list(centre = median,
                                      scale = var,
                                      thresh = 0.01))
+    output$intro <- renderUI({
+      
+      tagList(tags$h3("Disclosure Risk Assessment"),
+              tags$hr(),
+              tags$h4("Threshold Neighbourhood with parameters: "),
+              #tags$img(height = 300 , width = 812, src = "https://c.ndtvimg.com/2020-05/tpj5o4f8_cooking-_625x300_02_May_20.jpg"),
+              tags$br(),
+              tags$p("delta, kdistinct, ldeniable:"), round(nneg$parameters$delta,2), round(nneg$parameters$kdistinct,3), round(nneg$parameters$ldeniable,3),
+              tags$hr()
+              )
+    })
     
     output$rsam <- renderUI({
-      tags$h5("Delta Disclosure Risk of Sample")
+      tags$h5("Disclosure Risk of Sample")
     })
     linkscore <- nneg$Linkscore %>%
       mutate(InvValues=(1-Values)*100)
@@ -554,7 +580,7 @@ server <- function(input, output, session) {
     })
 
     output$osam <- renderUI({
-      tags$h5("Delta Disclosure Risk of Sample Outliers")
+      tags$h5("Disclosure Risk of Sample Outliers")
     })
     output$riskoutlier <- renderGauge({
       gauge(round(linkscore[,2][2],2), min = 0, max = 100, symbol = '%', gaugeSectors(
