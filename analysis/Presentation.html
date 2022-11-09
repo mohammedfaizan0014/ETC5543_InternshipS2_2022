@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Disclosure Risk Assessment</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Mohammed Faizan (31939872)" />
+    <script src="Presentation_files/header-attrs/header-attrs.js"></script>
+    <link href="Presentation_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="Presentation_files/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Disclosure Risk Assessment
+]
+.subtitle[
+## Business Analytics Creative Activity(ETC5543)- Semester 2, 2022
+]
+.author[
+### Mohammed Faizan (31939872)
+]
+
+---
+
+
+
+
+
+
+
+
+
+## Topics to be covered 🖊
+
+.pull-left[
+### 🔸 About the Project
+
+### 🔸 Analysis 
+
+### 🔸 Walk through of App
+
+### 🔸 Conclusion
+
+### 🔸 Q&amp;A
+]
+
+.pull-right[
+![](figure/image.png)
+.footnote[
+Source: [Recent cyber attacks in Australia](https://www.instagram.com/p/Ciy8iJ5skO2/?utm_source=ig_web_copy_link)]
+]
+
+---
+class: center, middle, inverse
+# About the Project
+
+---
+
+# About the Project
+
+.panelset[
+.panel[.panel-name[Project Aim 🎯]
+
+👩‍🏫 About:
+  - Dr. Pauline O'Shaughnessy (Professor at University of Wollongong),
+  
+  - Bradley Wakefield (PHd student, University of Wollongong)
+
+  - .red[.bold[Measuring disclosure risk]] universally based on three key principles: .bold[distinctness, accuracy and undeniability].
+  
+  
+  - Currently, they are working to make this framework more robust.
+  
+👨‍🎓 This internship was about building an **R package** and a **shiny dashboard** for this disclosure risk assessment framework.
+
+
+]
+.panel[.panel-name[Micro-Data 🔍]  
+
+.pull-left[
+
+Micro-Data or unit record data is data about individuals. This data contains records of personal information such as name, address, gender, identity numbers etc. 
+
+.pull-left[
+
+####  Personal Data
+
+* Name
+* Email Ids
+* Identity Numbers
+* Phone Numbers
+* Bank Accounts
+* Other Info
+
+
+]
+.pull-right[
+
+####  Recorded
+
+* Surveys
+* Customer databases
+* Administrative purposes
+* Government records
+* Health data 
+* Research
+]
+
+
+.pull-right[
+
+&lt;img src="figure/mdata.png"
+     width="400px" height="260px"
+     style="position:absolute; right:25px; top:150px;"&gt;
+     
+]
+
+]
+
+
+]
+
+.panel[.panel-name[Associated Disclosure Risk  ⌚]
+
+.pull-left[
+* Informed consent: Whether participating individuals are aware of how their data will be used
+
+* Legal Obligations: Australian Privacy Act 1988
+
+* Moral and Ethical Responsibilities
+]
+
+.pull-right[
+Examples:
+
+* Informed consent: part of the data held may contain illegal material such as violation of copyright, intellectual property, identity theft and invasion of privacy.
+
+* Legal Obligations: 
+    - 'WZ' and CEO of Services Australia (Privacy) [2021] AICmr 12 (13 April 2021)
+    - Optus Data Breach 
+
+* Moral and Ethical Responsibilities: data publications that reveal private information of people that can cause personal harm both physical and mental.
+]
+
+
+
+]
+]
+
+
+---
+# Disclosure Definition 💾 
+
+.panelset.sideways[
+
+.panel[.panel-name[Dalenius (1977)]  
+
+*“If the release of the statistics S makes it possible to determine the value [of some characteristic] more accurately than is possible without access to S, a disclosure has taken place. — Dalenius (1977)”*
+
+This leads onto the discussion onto what characteristics in the data are important. Ofcourse, considering all characteristics of the data gives absolutely no information about the underlying population. 
+
+]
+
+.panel[.panel-name[Dwork (2006)]  
+
+Differential Privacy notion of disclosure :
+* Auxillary Information Risk: 
+    Access to a database should not allow anyone to identify an individual whose information cannot be known without this database.
+    *Example: Assume that the database yields the average salaries of women from different nationalities. A person who has access to this database and the auxiliary information that “S Jones earns $4000 more than the average Australian woman” learns S Jones’ salary, while anyone knowing only the auxiliary information, without access to the average salaries, learns relatively little.*
+
+
+* *an auxiliary information generator with information about someone not even in the database can cause a privacy breach to this person. In order to sidestep this issue we change from absolute guarantees about disclosures to relative ones: any given disclosure will be, within a small multiplicative factor, just as likely whether or not the individual participates in the database. As a consequence, there is a nominally increased risk to the individual in participating, and only nominal gain to be had by concealing or misrepresenting one’s data. — Dwork (2006)*
+
+]
+
+.panel[.panel-name[maximum-knowledge-intruder perspective]  
+
+* Disclosure scenarios when any aspect of the original data could already be public knowledge, known as the maximum-knowledge-intruder perspective Ruiz et al. (2018). 
+
+* It is important to note that in this situation, we are merely intending to ensure that any existing knowledge can not be leveraged to obtain a greater understanding of confidential information.
+
+
+
+
+]
+]
+
+---
+class: center, middle, inverse
+# Statistical Disclosure Control
+Controlling disclosure rather than complete avoidance.
+
+
+---
+
+# Statistical Disclosure Control Methods 🛂 
+
+.bold[A trade-off exists between the .green[statistical utility] of the data and the .red[disclosure risk] associated. ]
+  - Example: if we group all records in one group, then there is no meaning to clustering.
+  
+
+
+These types of methods include: 
+* .bold[the addition of random noise] (Fuller, 1993; Shlomo, 2010)
+
+* .bold[micro-aggregation] (Domingo-Ferrer and Mateo-Sanz (2002))
+
+* .bold[rounding, rank and record swapping] (Nin et al., 2008; Dalenius and Reiss, 1982)
+
+* .bold[data shuffling] (Muralidhar and Sarathy, 2006; Burridge, 2003) 
+
+* .bold[Multiple Imputation with Multimodal Perturbation] (Melville and McQuaid (2012))
+
+
+
+---
+class: center, middle, inverse
+# Disclosure Framework
+(distinctness, accuracy and undeniability)
+
+
+---
+
+# Disclosure Framework 💻 
+
+In this work, the disclosure risk assessment formulated by Bradley Wakefield can be used for measuring disclosure risk universally based on three key principles: .bold[distinctness, accuracy and undeniability]. 
+
+.panelset.sideways[
+.panel[.panel-name[Scope]  
+.content-box-neutral[Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, 
+- irrespective of what mechanism was used to protect it. 
+- despite a difference in dimensionality between the original and protected data-sets.
+- without assuming any particular joint probability structure between the original and protected data.
+
+.content-box-duke-green[.blue[.bold[Assumption:]] we note that when referring to micro-data, we assume there is 
+.bold[ at least one continuous variable in the data-set].]]
+
+]
+.panel[.panel-name[Disclosure Definition]  
+
+&lt;img src="figure/def1.png" width="100%" /&gt;
+
+
+]
+.panel[.panel-name[Ellaboration]  
+Disclosure, in .bold[ Definition 1]., is defined in terms of three key principles: distinctness, accuracy and undeniability. More simply put in order to have a disclosure 
+
+(1) we need the observation value to be a sensitive characteristic (something likely pertaining to the individual only) within our original data-set (.bold[distinct]), 
+
+(2) we need to be able to properly estimate this observation based on the release of information (.bold[accurately estimated]) and,
+
+(3) we need our estimate to be able to be attributed with this observation with some level of certainty (.bold[undeniable]). 
+
+
+]
+]
+
+---
+# Determining if an observation is disclosed.
+.pull-left[.content-box-yellow[.bold.Large[Plausible Deniability]: 
+
+The greater the density of observations within a particular region of our sample 
+space, the harder it is we can use this estimate to distinguish this observation from other observations in the space.]]
+
+.pull-right[
+&lt;img src="Presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;&lt;img src="Presentation_files/figure-html/unnamed-chunk-2-2.png" width="100%" /&gt;
+]
+
+---
+# Framework functions: .red[drscore] and .red[update]
+##Input Parameters
+.pull-left[
+
+
+```r
+drscore &lt;-
+  function(
+    Sample, 
+    Protected,
+    delta = 0.05,
+    neighbourhood = 1,
+    kdistinct = 5,
+    ldeniable = kdistinct,
+    neigh_type = 'constant',
+    numeric.vars = NULL,
+    outlier.par = list(centre = median,
+                       scale = var,
+                       thresh = 0.01)
+  )
+```
+
+]
+
+.pull-right[
+
+
+```r
+update &lt;-
+  function(DRisk,...)
+```
+
+.footnote[
+Find detailed description of parameters in [**dress**](https://mohammedfaizan0014.github.io/dress/reference/index.html)]
+]
+]
+
+---
+class: center, middle, inverse
+# Disclosure Scores
+(Linkcounts, Linkscores, Linkscore_Levels)
+
+---
+# Disclosure Scores 
+.panelset[
+.panel[.panel-name[drscore]
+
+* The primary results from drscore are given as .bold[Linkcounts] and .bold[Linkscore].
+
+* Linkcounts has all the key combinations of categorical variables and numeral differences between the two data sets and potential matches such as outliers.
+
+* Linkscore is the overall disclosure risk and other proportions that we’d like to estimate — distinct, accurately estimated and undeniable.
+
+* Two widely used distances used in this package are Mahalanobis Distance and Euclidean Distance. 
+]
+.panel[.panel-name[update]
+* Update mainly avoids re-calculation of the distances to save computation time. 
+
+* It takes previous parameters from the DRisk object of the drscore. 
+
+* Distances are re-calculated only when the neighborhood is different. 
+]
+]
+
+---
+
+class: center, middle, inverse
+# Sample Output
+
+---
+### Linkcounts and Linkscores
+.scrollable[
+
+```
+## 
+## ###################################################################### 
+## #                     Disclosure Risk Assessment                     # 
+## ###################################################################### 
+## Nearest Neighbour Neighbourhood with parameters:
+##         delta = 0.05, kdistinct = 0.05, ldeniable = 0.00462962962962963. 
+## 
+## Number of Observations in the Sample                        1080
+## Number of Observations in the Protected Sample              1080
+## Number of Continuous Variables                              4
+## Number of Key Categories                                    1
+## Number of Outliers in Sample                                38
+## Number of Distinct Points in Sample                         1080
+## Number of Distinct Outliers in Sample                       38
+## Number of Exact Matches in Sample                           0
+## Number of Interval Matches in Sample                        0
+## Number of Outlier Interval Matches in Sample                0
+## Number of Distint Outlier Interval Matches in Sample        0 
+##  
+## Delta Disclosure Risk of Sample                             0.1083
+## Delta Disclosure Risk of Sample Outliers                    0.7632
+## Proportion Distinct                                         1
+## Proportion Estimated                                        0.962
+## Proportion Undeniable                                       0.1083 
+##  
+## Category Level Disclosure Risk: 
+##  
+##     N.Obs     DRisk  Out_DRisk Distinct Estimated Undeniable
+## All  1080 0.1083333 0.02685185        1  0.962037  0.1083333
+```
+]
+
+---
+### LinkScore_Levels
+
+#### Continuous Data
+
+```
+##     N.Obs     DRisk  Out_DRisk Distinct Estimated Undeniable
+## All  1080 0.1083333 0.02685185        1  0.962037  0.1083333
+```
+
+#### Mixed Dataset
+
+
+
+
+```
+##                                  N.Obs      DRisk   Out_DRisk   Distinct Estimated Undeniable
+## 1. &lt; HS Grad1. Industrial          190 0.00000000 0.000000000 0.00000000 0.8789474 0.00000000
+## 1. &lt; HS Grad2. Information          78 0.00000000 0.000000000 0.00000000 0.5769231 0.00000000
+## 2. HS Grad1. Industrial            636 0.02987421 0.003144654 0.04402516 0.9779874 0.05345912
+## 2. HS Grad2. Information           335 0.00000000 0.000000000 0.00000000 0.9641791 0.00000000
+## 3. Some College1. Industrial       342 0.00000000 0.000000000 0.00000000 0.9473684 0.00000000
+## 3. Some College2. Information      308 0.00000000 0.000000000 0.00000000 0.9350649 0.00000000
+## 4. College Grad1. Industrial       274 0.00000000 0.000000000 0.00000000 0.8978102 0.00000000
+## 4. College Grad2. Information      411 0.00000000 0.000000000 0.00000000 0.9002433 0.00000000
+## 5. Advanced Degree1. Industrial    102 0.00000000 0.000000000 0.00000000 0.5294118 0.00000000
+## 5. Advanced Degree2. Information   324 0.00000000 0.000000000 0.00000000 0.7746914 0.00000000
+```
+
+---
+class: center, middle, inverse
+# Walkthrough of RShiny App
+
+---
+###.Large[Reactive Shiny]: Key Challegenges
+
+- **update**: update was modified to to calculate distances only when the neighbourhood from DRisk object from drscore was different from the new neighbourhood input.
+
+- **Handling Numeric Variable**: name,position,range
+
+
+
+.pull-left[
+*Illustration*: 
+
+```
+##   age       education       jobclass      wage
+## 1  18    1. &lt; HS Grad  1. Industrial  75.04315
+## 2  24 4. College Grad 2. Information  70.47602
+## 3  45 3. Some College  1. Industrial 130.98218
+## 4  43 4. College Grad 2. Information 154.68529
+```
+
+.content-box-neutral[Robust to:
+- variables names not in the data-set
+- out of bound subscripts
+- non-numeric]
+
+]
+
+.pull-right[
+&lt;div class="figure"&gt;
+&lt;img src="gif/nvar.png" alt="Handling Numeric Variables" width="100%" /&gt;
+&lt;p class="caption"&gt;Handling Numeric Variables&lt;/p&gt;
+&lt;/div&gt;&lt;div class="figure"&gt;
+&lt;img src="gif/nvare.png" alt="Handling Numeric Variables" width="100%" /&gt;
+&lt;p class="caption"&gt;Handling Numeric Variables&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+###.Large[Reactive Shiny]: 
+
+.pull-left[- Incomplete Data
+]
+
+.pull-right[
+
+&lt;img src="gif/data.gif" width="100%" /&gt;
+]
+
+.pull-left[
+- `update` button action before `drscore`
+]
+
+.pull-right[
+&lt;img src="gif/update.gif" width="100%" /&gt;
+]
+
+---
+# R Package: [dress](https://mohammedfaizan0014.github.io/dress/articles/dress.html)
+
+&gt;The package can be found on the [Github repository](https://github.com/mohammedfaizan0014/dress) and on its [webpage](https://mohammedfaizan0014.github.io/dress/index.html).
+
+.pull-left[
+
+📌 roxygen2 documentation
+
+📌 Parameter Assertion Tests
+
+📌 vignette 
+
+📌 pkgdown website
+
+📌 R CMD Check and Github Actions
+
+]
+
+.pull-right[
+&lt;img src="figure/pkg.png" width="100%" /&gt;
+
+]
+
+
+
+
+---
+# Work Done 📜
+
+📌 Developed 
+
+--
+
+📌 Explored 
+
+--
+
+📌 Improved our project management skills
+
+--
+
+📌 Learnt to actively use GitHub in a more extensive manner
+
+--
+
+📌 Refined our knowledge in processing of enormous datasets
+
+
+
+---
+class: center, inverse
+
+.pull-top[
+&lt;br&gt;
+&lt;br&gt;
+# Thank you
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
