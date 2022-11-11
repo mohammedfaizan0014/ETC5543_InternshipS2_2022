@@ -110,10 +110,9 @@ knitr::include_graphics(here::here("analysis/figure/image.png"))
 
 # Abstract
 
-Research has evolved some of the most reasonable insights in varied fields of study, especially when backed with data. However, some research has been under the watch of ethics and privacy concerns of the subjects and individuals who take part and form basis of such research data. Market research and sentiment analysis, response to public policy and survival data are some research topics that are most relevant to holding sensitive private data or micro data of individuals. And, therefore governments and institutions have formulated laws and regulations to respect confidentiality before any data set containing sensitive information of individuals is made available to researchers or is released as open data.
+Research has evolved some of the most valuable insights in varied fields of study, especially when backed with data. However, some research has been under the watch of ethics and privacy concerns of the subjects and individuals who take part and form basis of such research data. Market research and sentiment analysis, response to public policy and survival data are some research topics that are most relevant to holding sensitive private data or micro data of individuals. And, therefore governments and institutions have formulated laws and regulations to respect confidentiality before any data set containing sensitive information of individuals is made available to researchers or is released as open data.
 
-Many frameworks for statistical disclosure control exist which aim to provide this confidentiality, however many such methods are built to assess the disclosure risk of 
-the data sets protected using specific control methods only. In this work, the disclosure risk assessment formulated by *Bradley Wakefield* can be used for measuring disclosure risk universally based on three key principles: distinctness, accuracy and undeniability. Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, irrespective of what mechanism was used to protect it. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. 
+Many frameworks for statistical disclosure control exist which aim to provide this confidentiality, however many such methods are built to assess the disclosure risk of the data sets protected using specific control methods only. In this work, the disclosure risk assessment formulated by *Bradley Wakefield* can be used for measuring disclosure risk universally based on three key principles: distinctness, accuracy and undeniability. Using these principles, we can obtain a disclosure risk measure associated with the release of protected data, irrespective of what mechanism was used to protect it. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. 
 
 We have developed an R package, `dress` that gives this disclosure risk score for micro-data. Additionally a shiny dashboard application has been deployed for easy use of this disclosure risk framework.
 
@@ -135,6 +134,8 @@ Though data analytics is now known to have drawn remarkable insights, from exist
 
 Disclosure risk associated with unit record data collected as part of surveys, customer databases, administrative purposes, government records, health data and survival experimental data inevitably amounts to a serious ethical issue. Informed consent, data distribution and morality of usage pose some concerns with respect to private micro-data of individuals. Moreover, there are legal(*Privacy Act 1988*) and moral obligations that a data custodian and the researcher may face. For example, part of the data held may contain illegal material such as violation of copyright, intellectual property, identity theft and invasion of privacy. It is difficult to filter such data from large data sets. Another good example of moral misuse of private data is data gathering, analytics and other IT services that have the capability to influence people's mood and the decision they take. When powerful technologies are introduced, that have the potential to deliver significant benefits to individuals and society, careful consideration inflicting same level of harm must be accounted for.
 
+> The `Australain Privacy Principles (or APPs)` are the basis of the ["privacy protection framework in the Privacy Act 1988 (Privacy Act). They apply to any organisation or agency the Privacy Act covers. A breach of an Australian Privacy Principle is an ‘interference with the privacy of an individual’ and can lead to regulatory action and penalties."](https://www.oaic.gov.au/privacy/australian-privacy-principles) 
+
 Therefore, these obligations imply and entrust the research community and data custodians to publish, disseminate and use information in such a way that the statistical usefulness of the data is maintained, without risk of disclosing the confidential information of any individual. 
 
 
@@ -149,7 +150,7 @@ Auxiliary information is the information that is known about an individual from 
 
 In this framework for disclosure risk assessment for micro-data, we aim to propose a method by which disclosure risk (at the individual value level) can be measured on any micro-level release of information irrespective of how obscurity was introduced into the released information. Several disclosure risk measures have been identified, however they are limited to handle specific Statistical Disclosure Control methods used to protect the released information (Willenborg and de Waal, 2001; Domingo-Ferrer and Mateo-Sanz, 2002; Truta et al., 2003; Lin and Wise, 2012; Lin, 2014; Templ, 2017). And other measures assume one-to-one dependency between the original data and the released (protected) information (we will refer to this as a pairing) and independence between other observations (Duncan and Lambert, 1986; Skinner and Elliot, 2002; Domingo-Ferrer and Torra, 2004; Templ, 2017). Therefore, these methods are limited to within methodology comparisons and can be unsuitable when a combination of techniques are applied.
 
-Statistical Disclosure Control encompasses a vast array of methodologies that introduce obscurity and error into a data-set in order to mask the values of individual observations. These types of methods include: the addition of random noise (Fuller, 1993; Shlomo, 2010), micro-aggregation (Domingo-Ferrer and Mateo-Sanz (2002)), rounding, rank and record swapping (Nin et al., 2008; Dalenius and Reiss, 1982), data shuffling (Muralidhar and Sarathy, 2006; Burridge, 2003) and Multiple Imputation with Multimodal Perturbation (Melville and McQuaid (2012)), as well as the non-perturbation SDC methods with examples consisting of global recording, suppression and sub-sampling (Willenborg and De Waal (2012)).
+Statistical Disclosure Control(SDC) encompasses a vast array of methodologies that introduce obscurity and error into a data-set in order to mask the values of individual observations. These types of methods include: the addition of random noise (Fuller, 1993; Shlomo, 2010), micro-aggregation (Domingo-Ferrer and Mateo-Sanz (2002)), rounding, rank and record swapping (Nin et al., 2008; Dalenius and Reiss, 1982), data shuffling (Muralidhar and Sarathy, 2006; Burridge, 2003) and Multiple Imputation with Multimodal Perturbation (Melville and McQuaid (2012)), as well as the non-perturbation SDC methods with examples consisting of global recording, suppression and sub-sampling (Willenborg and De Waal (2012)).
 These methodologies all prescribe considerably different dependency structures between the protected and original sample and as such make comparisons extremely difficult. A unifying perspective of disclosure is of great interest and is the primary contribution this framework offers. The results of this disclosure risk assessment simplify the problem into two main questions: 
 
 (1) What characteristics of the data are sensitive? 
@@ -161,7 +162,7 @@ These questions make no mention of the method used, nor even attempt to describe
 
 # Methodology and Disclosure Framework:
 
-> The `Australain Privacy Principles (or APPs)` are the basis of the ["privacy protection framework in the Privacy Act 1988 (Privacy Act). They apply to any organisation or agency the Privacy Act covers. A breach of an Australian Privacy Principle is an ‘interference with the privacy of an individual’ and can lead to regulatory action and penalties."](https://www.oaic.gov.au/privacy/australian-privacy-principles)
+
  
 ## Defining Disclosure
 
@@ -183,7 +184,7 @@ Note that this perspective for acknowledging disclosure risk of a protected data
 
 ## Determining if an observation is disclosed.
 
-In the `dress::wage4` and `dress::wage4_protected`data sets, which have 4 variables: "age", "education", "jobclass" and "wage", suppose we wanted to measure the disclosure risk between the  Mid−Atlantic Wage data(*reference data*) and a possible released data de-identified by some *SDC* method, theoretically using an acceptance margin of 5%  i.e. if our guess is within ±5% of the true wage we consider it a disclosure.  The summary and wage distribution for each dataset is shown below.
+In the `dress::wage4` and `dress::wage4_protected`data sets, which have 4 variables: "age", "education", "jobclass" and "wage", suppose we wanted to measure the disclosure risk between the  Mid−Atlantic Wage data(James et al., 2013, ) and a possible released data de-identified by some SDC method, theoretically using an acceptance margin of 5%  i.e. if our guess is within ±5% of the true wage we consider it a disclosure.  The summary and wage distribution for each dataset is shown below.
 
 
 ```{r data}
@@ -306,11 +307,6 @@ nn$Linkscore
 ```
 
 
-
-
-
-
-
 #### Update
 
 Update mainly avoids re-calculation of the distances to save computation time. It takes previous parameters from the `DRisk` object of the `drscore`. Distances are re-calculated only when the neighbourhood is different. However, in the current version update does not work for mixed data-sets having both categorical and continuous variables. 
@@ -349,7 +345,7 @@ DRisk_Fxd <- update(DRisk_NN,neigh_type = 'constant',
 
 ## R Package: dress
 
-In creating the package for this disclosure framework, the first task was to document these functions along with the two data sets which were published as part of the package. Each function and each data should have its own documentation. And each function must be exported to the `namesapce` in order to be available when the when the package is installed. Documentation allows the the user's to know about the package usage and about the different functions and data-sets that come with the package. It is also help for the developers to keep record for future. R essentially provides for documentation in the `.Rd` files which are based on LaTeX and are stored in the `man/` folder. Using `roxygen2` these `.Rd` files can be easily generated from within the `R scripts` of the functions. The website for the package was developed using `pkgdown` and was formatted based on the `fable` package. 
+In creating the package for this disclosure framework, the first task was to document these functions along with the two data sets which were published as part of the package. Each function and each data should have its own documentation. And each function must be exported to the `namesapce` in order to be available when the when the package is installed. Documentation allows the the user's to know about the package usage and about the different functions and data-sets that come with the package. It is also help for the developers to keep record for future. R essentially provides for documentation in the `.Rd` files which are based on LaTeX and are stored in the `man/` folder. Using `roxygen2` these `.Rd` files can be easily generated from within the `R scripts` of the functions. The website for the package was developed using `pkgdown`.
 
 >The package can be found on the [Github repository](https://github.com/mohammedfaizan0014/dress) and on its [webpage](https://mohammedfaizan0014.github.io/dress/index.html).
 
@@ -1526,6 +1522,8 @@ Official Statistics 9(2), 383–406.
 
 Hu, J. (2018). Bayesian estimation of attribute and identification disclosure risks in syn- thetic data.
 
+James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013) An Introduction to Statistical Learning with applications in R, https://www.statlearning.com, Springer-Verlag, New York
+
 Lin, Y.-X. (2014). Density approximant based on noise multiplied data. In J. Domingo- Ferrer (Ed.), Privacy in Statistical Databases: UNESCO Chair in Data Privacy, Inter- national Conference, PSD 2014, Ibiza, Spain, September 17-19, 2014. Proceedings, pp. 89–104. Springer International Publishing.
 
 Lin, Y.-X. and P. Wise (2012). Estimation of regression parameters from noise multiplied data. Journal of Privacy and Confidentiality 4 (2), 61–94.
@@ -1537,7 +1535,7 @@ Melville, N. and M. McQuaid (2012). Research note—generating shareable statist
 
 Muralidhar, K. and R. Sarathy (2006). Data shuffling—a new masking approach for nu- merical data. Management Science 52(5), 658–670.
 
-Nin, J., J. Herranz, and V. Torra (2008). Rethinking rank swapping to decrease disclosure risk. Data & Knowledge Engineering 64(1), 346 – 364. Fourth International Conference on
+Nin, J., J. Herranz, and V. Torra (2008). Rethinking rank swapping to decrease disclosure risk. Data & Knowledge Engineering 64(1), 346 – 364. Fourth International Conference on Business Process Management (BPM 2006) 8th International Conference on Enterprise Information Systems (ICEIS’ 2006).
 
 Ruiz, N., K. Muralidhar, and J. Domingo-Ferrer (2018). On the privacy guarantees of synthetic data: A reassessment from the maximum-knowledge attacker perspective. In J. Domingo-Ferrer and F. Montes (Eds.), Privacy in Statistical Databases, Cham, pp. 59–74. Springer International Publishing.
 
@@ -1592,7 +1590,7 @@ Whether an individual is ‘reasonably identifiable’ from particular informati
 - who will have access to the information
 - other information either held by or available to the APP entity that holds the information
 whether it is possible for the individual or entity that holds the information to identify the individual, using available resources (including other information available to that individual or entity). Where it may be possible to identify an individual using available resources, the practicability, including the time and cost involved, will be relevant to deciding whether an individual is ‘reasonably identifiable’
-- if the information is publically released, whether a reasonable member of the public who accesses that information would be able to identify the individual.
+- if the information is publicly released, whether a reasonable member of the public who accesses that information would be able to identify the individual.
 
 #### Informed Consent
 

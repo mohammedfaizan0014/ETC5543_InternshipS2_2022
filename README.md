@@ -1,11 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!--# fable <a href='https://fable.tidyverts.org'><img src='man/figures/logo.png' align="right" height="138.5" /></a>-->
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mohammedfaizan0014/dress/workflows/R-CMD-check/badge.svg)](https://github.com/mohammedfaizan0014/dress/actions)
-<!--[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/fable)](https://cran.r-project.org/package=fable)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html) -->
 <!-- badges: end -->
 
 The R package
@@ -17,6 +14,11 @@ accuracy and un-deniability. This method can be applied to any pair of
 original and protected data-sets despite a difference in dimensionality
 and without assuming any particular joint probability structure between
 the original and protected data.
+
+# In the repository
+
+-   **analysis/** : report and presentation
+-   **dress/** : the shiny dashboard
 
 ## Installation
 
