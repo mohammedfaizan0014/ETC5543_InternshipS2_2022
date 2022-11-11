@@ -232,22 +232,11 @@ ui <- dashboardPage(
       tabItem(tabName = "about",
               fluidRow(box(width=12,
                            title="About",solidHeader=TRUE,status='primary',background = "white",height="100%",
-                           tags$h2("Help Center"),
+                           tags$h1("Dress"),
                            tags$hr(),
-                           tags$p(""),
-                           tags$img(src="x1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="format.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="heatmap1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="show.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="heatmap2.png"),
-                           tags$img(src="show1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="settings.png",width="50%",height="50%")
-
+                           tags$p("The dress package provides some measures for disclosure risk associated with the release of protected data, irrespective of what mechanism was used to protect it. Key principles of the disclosure framework include distinctness, accuracy and undeniability. This method can be applied to any pair of original and protected data-sets despite a difference in dimensionality and without assuming any particular joint probability structure between the original and protected data. "),
+                           tags$p("Disclosure is defined in terms of three key principles: distinctness, accuracy and undeniability. More simply put in order to have a disclosure we need the observation value to be a sensitive characteristic (something likely pertaining to the individual only) within our original data-set (distinct), we need to be able to properly estimate this observation based on the release of information (accurately estimated) and we need our estimate to be able to be attributed with this observation with some level of certainty (undeniable)."),
+                           tags$h6("Access package repository", tags$a(href="https://github.com/mohammedfaizan0014/dress","here"))
               )
               )
       ),
@@ -256,19 +245,19 @@ ui <- dashboardPage(
                            title="Help Center",solidHeader=TRUE,status='primary',background = "white",height="100%",
                            tags$h2("Help Center"),
                            tags$hr(),
-                           tags$p(""),
-                           tags$img(src="x1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="format.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="heatmap1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="show.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="heatmap2.png"),
-                           tags$img(src="show1.png",width="50%",height="50%"),
-                           tags$p(""),
-                           tags$img(src="settings.png",width="50%",height="50%")
+                           tags$p("1. Upload original data"),
+                           tags$hr(),
+                           tags$p("2. Upload released data"),
+                           tags$hr(),
+                           tags$p("3. Input parameters and select appropriate distance measures"),
+                           tags$hr(),
+                           tags$p("4. Enter numeric variables"),
+                           tags$hr(),
+                           tags$p("5. Get the drscore"),
+                           tags$hr(),
+                           tags$p("Note: update works after drscore"),
+                           tags$p("More information about mathematics behind measuring the disclosure risk can be found in the paper On the Disclosure Risk Framework for Micro-Level Data and on",
+                           tags$a(href="https://mohammedfaizan0014.github.io/dress/index.html","the package site."))
 
               )
               )
@@ -276,8 +265,8 @@ ui <- dashboardPage(
       tabItem(tabName = "contact",
               fluidRow(box(width=12,
                            title="Contact Us",solidHeader=TRUE,status='primary',background = "white",height=800,
-                           tags$p(""),
-                           tags$p("")
+                           tags$h3("Report package issues on GitHub"),
+                           tags$a(href="https://github.com/mohammedfaizan0014/dress/issues","https://github.com/mohammedfaizan0014/dress/issues")
               ))
       ),
       tabItem(tabName = "faq",

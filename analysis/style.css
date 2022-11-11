@@ -52,6 +52,9 @@ body {
   font-weight: normal;
   color: var(--text-color);
 }
+
+
+
 h1, h2, h3 {
   font-family: var(--header-font-family), var(--header-font-family-fallback);
   font-weight: 600;
@@ -121,15 +124,20 @@ a, a > code {
 .inverse a, .inverse a > code {
   color: var(--inverse-link-color);
 }
+
 .title-slide, .title-slide h1, .title-slide h2, .title-slide h3 {
   color: var(--title-slide-text-color);
 }
+
 .title-slide {
-  background-color: var(--title-slide-background-color);
+   background-color: var(--title-slide-background-color);
 }
 .title-slide .remark-slide-number {
   display: none;
 }
+
+
+
 /* Two-column layout */
 .left-column {
   width: 20%;
@@ -397,3 +405,8 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   float: right;
   width: 70%;
 }
+
+.scrollable {
+  height: 80%;
+  overflow-y: auto;
+} 

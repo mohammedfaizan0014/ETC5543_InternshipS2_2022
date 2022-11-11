@@ -64,7 +64,7 @@ class: center, middle, inverse
 .panelset[
 .panel[.panel-name[Project Aim 🎯]
 
-👩‍🏫 About:
+👨‍🏫 About:
   - Dr. Pauline O'Shaughnessy (Professor at University of Wollongong),
   
   - Bradley Wakefield (PHd student, University of Wollongong)
@@ -74,7 +74,7 @@ class: center, middle, inverse
   
   - Currently, they are working to make this framework more robust.
   
-👨‍🎓 This internship was about building an **R package** and a **shiny dashboard** for this disclosure risk assessment framework.
+👩‍🎓 This internship was about building an **R package** and a **shiny dashboard** for this disclosure risk assessment framework.
 
 
 ]
@@ -176,7 +176,7 @@ Differential Privacy notion of disclosure :
 
 ]
 
-.panel[.panel-name[maximum-knowledge-intruder perspective]  
+.panel[.panel-name[Ruiz et al. (2018)]  
 
 * Disclosure scenarios when any aspect of the original data could already be public knowledge, known as the maximum-knowledge-intruder perspective Ruiz et al. (2018). 
 
@@ -196,7 +196,7 @@ Controlling disclosure rather than complete avoidance.
 
 ---
 
-# Statistical Disclosure Control Methods 🛂 
+# Statistical Disclosure Control Methods 🎛 
 
 .bold[A trade-off exists between the .green[statistical utility] of the data and the .red[disclosure risk] associated. ]
   - Example: if we group all records in one group, then there is no meaning to clustering.
@@ -363,16 +363,16 @@ class: center, middle, inverse
 ## Number of Outlier Interval Matches in Sample                0
 ## Number of Distint Outlier Interval Matches in Sample        0 
 ##  
-## Delta Disclosure Risk of Sample                             0.1083
-## Delta Disclosure Risk of Sample Outliers                    0.7632
+## Delta Disclosure Risk of Sample                             0.087
+## Delta Disclosure Risk of Sample Outliers                    0.6842
 ## Proportion Distinct                                         1
-## Proportion Estimated                                        0.962
-## Proportion Undeniable                                       0.1083 
+## Proportion Estimated                                        0.9796
+## Proportion Undeniable                                       0.087 
 ##  
 ## Category Level Disclosure Risk: 
 ##  
-##     N.Obs     DRisk  Out_DRisk Distinct Estimated Undeniable
-## All  1080 0.1083333 0.02685185        1  0.962037  0.1083333
+##     N.Obs      DRisk  Out_DRisk Distinct Estimated Undeniable
+## All  1080 0.08703704 0.02407407        1 0.9796296 0.08703704
 ```
 ]
 
@@ -381,9 +381,11 @@ class: center, middle, inverse
 
 #### Continuous Data
 
+
+
 ```
-##     N.Obs     DRisk  Out_DRisk Distinct Estimated Undeniable
-## All  1080 0.1083333 0.02685185        1  0.962037  0.1083333
+##     N.Obs      DRisk  Out_DRisk Distinct Estimated Undeniable
+## All  1080 0.08703704 0.02407407        1 0.9796296 0.08703704
 ```
 
 #### Mixed Dataset
@@ -392,17 +394,28 @@ class: center, middle, inverse
 
 
 ```
-##                                  N.Obs      DRisk   Out_DRisk   Distinct Estimated Undeniable
-## 1. &lt; HS Grad1. Industrial          190 0.00000000 0.000000000 0.00000000 0.8789474 0.00000000
-## 1. &lt; HS Grad2. Information          78 0.00000000 0.000000000 0.00000000 0.5769231 0.00000000
-## 2. HS Grad1. Industrial            636 0.02987421 0.003144654 0.04402516 0.9779874 0.05345912
-## 2. HS Grad2. Information           335 0.00000000 0.000000000 0.00000000 0.9641791 0.00000000
-## 3. Some College1. Industrial       342 0.00000000 0.000000000 0.00000000 0.9473684 0.00000000
-## 3. Some College2. Information      308 0.00000000 0.000000000 0.00000000 0.9350649 0.00000000
-## 4. College Grad1. Industrial       274 0.00000000 0.000000000 0.00000000 0.8978102 0.00000000
-## 4. College Grad2. Information      411 0.00000000 0.000000000 0.00000000 0.9002433 0.00000000
-## 5. Advanced Degree1. Industrial    102 0.00000000 0.000000000 0.00000000 0.5294118 0.00000000
-## 5. Advanced Degree2. Information   324 0.00000000 0.000000000 0.00000000 0.7746914 0.00000000
+##                                  N.Obs      DRisk   Out_DRisk   Distinct
+## 1. &lt; HS Grad1. Industrial          190 0.00000000 0.000000000 0.00000000
+## 1. &lt; HS Grad2. Information          78 0.00000000 0.000000000 0.00000000
+## 2. HS Grad1. Industrial            636 0.02987421 0.003144654 0.04402516
+## 2. HS Grad2. Information           335 0.00000000 0.000000000 0.00000000
+## 3. Some College1. Industrial       342 0.00000000 0.000000000 0.00000000
+## 3. Some College2. Information      308 0.00000000 0.000000000 0.00000000
+## 4. College Grad1. Industrial       274 0.00000000 0.000000000 0.00000000
+## 4. College Grad2. Information      411 0.00000000 0.000000000 0.00000000
+## 5. Advanced Degree1. Industrial    102 0.00000000 0.000000000 0.00000000
+## 5. Advanced Degree2. Information   324 0.00000000 0.000000000 0.00000000
+##                                  Estimated Undeniable
+## 1. &lt; HS Grad1. Industrial        0.8789474 0.00000000
+## 1. &lt; HS Grad2. Information       0.5769231 0.00000000
+## 2. HS Grad1. Industrial          0.9779874 0.05345912
+## 2. HS Grad2. Information         0.9641791 0.00000000
+## 3. Some College1. Industrial     0.9473684 0.00000000
+## 3. Some College2. Information    0.9350649 0.00000000
+## 4. College Grad1. Industrial     0.8978102 0.00000000
+## 4. College Grad2. Information    0.9002433 0.00000000
+## 5. Advanced Degree1. Industrial  0.5294118 0.00000000
+## 5. Advanced Degree2. Information 0.7746914 0.00000000
 ```
 
 ---
@@ -495,23 +508,27 @@ class: center, middle, inverse
 ---
 # Work Done 📜
 
-📌 Developed 
+📌 Developed R package project.
 
 --
 
-📌 Explored 
+📌 Explored the framework functions and created the documentation.
 
 --
 
-📌 Improved our project management skills
+📌 Developed the Shiny Dashboard.
 
 --
 
-📌 Learnt to actively use GitHub in a more extensive manner
+📌 Investigated scenarios of user interaction and shiny reactivity.
 
 --
 
-📌 Refined our knowledge in processing of enormous datasets
+📌 Communicated through GitHub.
+
+--
+
+📌 Active Learning by hands-on experience.
 
 
 
@@ -524,6 +541,66 @@ class: center, inverse
 # Thank you
 ]
 
+
+---
+# References
+
+.scrollable[
+Agrawal, R. and R. Srikant (2000). Privacy-preserving data mining. SIGMOD Rec. 29 (2), 439–450.
+
+Burridge, J. (2003). Information preserving statistical obfuscation. Statistics and Comput- ing 13(4), 321–327.
+
+Caiola, G. and J. P. Reiter (2010). Random forests for generating partially synthetic, categorical data. Trans. Data Privacy 3 (1), 27–42.
+
+Dalenius, T. (1977). Towards a methodology for statistical disclosure control. Statistisk tidskrift 15, 429–444.
+
+Dalenius, T. and S. P. Reiss (1982). Data-swapping: A technique for disclosure control. Journal of Statistical Planning and Inference 6 (1), 73 – 85.
+
+de Wolf, P.-P. and K. Zeelenberg (2015). Challenges for statistical disclosure control in a world with big data and open data. In Proceedings of the 60th World Statistics Congress, Volume 60.
+
+Domingo-Ferrer, J. and J. M. Mateo-Sanz (2002). Practical data-oriented microaggregation for statistical disclosure control. IEEE Trans. on Knowl. and Data Eng. 14(1), 189–201.
+
+Domingo-Ferrer, J. and V. Torra (2004). Disclosure risk assessment in statistical data protection. Journal of Computational and Applied Mathematics 164, 285–293.
+
+Duncan, G. T. and D. Lambert (1986). Disclosure-limited data dissemination. Journal of the American Statistical Association 81(393), 10–18.
+
+Dwork, C. (2006). Differential privacy. In M. Bugliesi, B. Preneel, V. Sassone, and I. We- gener (Eds.), Automata, Languages and Programming: 33rd International Colloquium, ICALP 2006, Venice, Italy, July 10-14, 2006, Proceedings, Part II, pp. 1–12. Berlin, Heidelberg: Springer Berlin Heidelberg.
+
+Elliot, M. and J. Domingo-Ferrer (2018). The future of statistical disclosure control. Fuller, W. A. (1993). Masking procedures for microdata disclosure limitation. Journal of Official Statistics 9(2), 383–406.
+
+Fuller, W. A. (1993). Masking procedures for microdata disclosure limitation. Journal of Official Statistics 9(2), 383–406.
+
+Hu, J. (2018). Bayesian estimation of attribute and identification disclosure risks in syn- thetic data.
+
+Lin, Y.-X. (2014). Density approximant based on noise multiplied data. In J. Domingo- Ferrer (Ed.), Privacy in Statistical Databases: UNESCO Chair in Data Privacy, Inter- national Conference, PSD 2014, Ibiza, Spain, September 17-19, 2014. Proceedings, pp. 89–104. Springer International Publishing.
+
+Lin, Y.-X. and P. Wise (2012). Estimation of regression parameters from noise multiplied data. Journal of Privacy and Confidentiality 4 (2), 61–94.
+
+Mahalanobis, P. C. (1936). On the generalised distance in statistics. Proceedings of the National Institute of Sciences of India 2 (1), 49–55.
+
+Melville, N. and M. McQuaid (2012). Research note—generating shareable statistical databases for business value: Multiple imputation with multimodal perturbation. Info. Sys. Research 23(2), 559–574.
+
+Muralidhar, K. and R. Sarathy (2006). Data shuffling—a new masking approach for nu- merical data. Management Science 52(5), 658–670.
+
+Nin, J., J. Herranz, and V. Torra (2008). Rethinking rank swapping to decrease disclosure risk. Data &amp; Knowledge Engineering 64(1), 346 – 364. Fourth International Conference on
+
+Ruiz, N., K. Muralidhar, and J. Domingo-Ferrer (2018). On the privacy guarantees of synthetic data: A reassessment from the maximum-knowledge attacker perspective. In J. Domingo-Ferrer and F. Montes (Eds.), Privacy in Statistical Databases, Cham, pp. 59–74. Springer International Publishing.
+
+Shlomo, N. (2010). Releasing microdata: Disclosure risk estimation, data masking and assessing utility. The Journal of Privacy and Confidentiality 2 (1), 73–91.
+
+Skinner, C. J. and M. J. Elliot (2002). A measure of disclosure risk for microdata. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 64 (4), 855–867.
+
+Taub, J., M. Elliot, M. Pampaka, and D. Smith (2018). Differential correct attribution prob- ability for synthetic data: An exploration. In J. Domingo-Ferrer and F. Montes (Eds.), Privacy in Statistical Databases, Cham, pp. 122–137. Springer International Publishing.
+
+Templ, M. (2017, 05). Statistical Disclosure Control for Microdata. Methods and Applica- tions in R. Springer.
+
+Truta, T. M., F. Fotouhi, and D. Barth-Jones (2003). Privacy and confidentiality manage- ment for the microaggregation disclosure control method: Disclosure risk and information loss measures. In Proceedings of the 2003 ACM Workshop on Privacy in the Electronic Society, WPES ’03, New York, NY, USA, pp. 21–30. Association for Computing Machinery.
+
+Willenborg, L. and T. de Waal (2001). Disclosure risk for tabular data. In Elements of Statistical Disclosure Control. Lecture Notes in Statistics, Volume 155, pp. 137–157. Springer, New York, NY.
+
+Willenborg, L. and T. De Waal (2012). Elements of statistical disclosure control. In Lecture Notes in Statistics, Volume 155. Springer New York.
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
