@@ -86,7 +86,7 @@ class: center, middle, inverse
 `r emo::ji("professor")` About:
   - Dr. Pauline O'Shaughnessy (Professor at University of Wollongong),
   
-  - Bradley Wakefield (PHd student, University of Wollongong)
+  - Bradley Wakefield (PhD student, University of Wollongong)
 
   - .red[.bold[Measuring disclosure risk]] universally based on three key principles: .bold[distinctness, accuracy and undeniability].
   
